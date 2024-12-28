@@ -9,7 +9,7 @@ theme: /
     state: Weather
         intent!: /Погода
         script:
-            $session.city = $context.entities.city; // Используем сессионную переменную
+            $session.city = $context.entities.city; // Сохранение города в сессии
             if ($session.city) {
                 $http.get("http://api.weatherapi.com/v1/current.json", {
                     "key": "50aa229c887e47dd8c631208240411",
@@ -17,7 +17,8 @@ theme: /
                 });
             } else {
                 a: "Пожалуйста, уточните город, например: 'Какая погода в Москве?'";
-                $state.go("/NoMatch");  // Переход на другое состояние
+                // Переход на состояние "NoMatch"
+                $state.go("/NoMatch");  // Явный переход через $state
             }
 
     state: WeatherResponse
