@@ -1,59 +1,31 @@
-require: slotfilling/slotFilling.sc
-  module = sys.zb-common
+require: functions.js
+
 theme: /
 
     state: Start
         q!: $regex</start>
-        a: Здравствуйте! Я могу рассказать погоду. Например, скажите: "Какая погода в Москве?"
+        a: Привет! Я электронный помощник. Я могу сообщить вам текущую погоду в любом городе. Напишите город.
 
-    state: Request
-        intent!: /Погода
+    state: GetWeather
+        intent!: /geo
         script:
-            # Извлекаем город из сущности
-            $session.city = $context.entities.city;
-            
-            # Проверяем, что город передан
-            if ($session.city) {
-                # Делаем запрос на погоду
-                HttpRequest:
-                    url = "http://api.weatherapi.com/v1/current.json?key=50aa229c887e47dd8c631208240411&q=" + $session.city
-                    method = "GET"
-                    body = ""
-                    okState = "WeatherResponse"
-                    errorState = "WeatherError"
-                    timeout = 0
-                    headers = []
-            } else {
-                a: "Пожалуйста, уточните город. Например, 'Какая погода в Москве?'"
-                go: "NoMatch"
-            }
+            var city = $caila.inflect($parseTree._geo, ["nomn"]);
+            openWeatherMapCurrent("metric", "ru", city).then(function (res) {
+                if (res && res.weather) {
+                    $reactions.answer("Сегодня в городе " + capitalize(city) + " " + res.weather[0].description + ", " + Math.round(res.main.temp) + "°C" );
+                    if(res.weather[0].main == 'Rain' || res.weather[0].main == 'Drizzle') {
+                        $reactions.answer("Советую захватить с собой зонтик!")
+                    } else if (Math.round(res.main.temp) < 0) {
+                        $reactions.answer("Бррррр ну и мороз")
+                    }
+                } else {
+                    $reactions.answer("Что-то сервер барахлит. Не могу узнать погоду.");
+                }
+            }).catch(function (err) {
+                $reactions.answer("Что-то сервер барахлит. Не могу узнать погоду.");
+            });
 
-    state: WeatherResponse
-        event!: httpSuccess
-        script:
-            # Разбираем ответ от API
-            $data = $parse.json($response.body);
-            $location = $data.location.name;
-            $temp = $data.current.temp_c;
-            
-            a: "Сейчас в {{$location}} температура: {{$temp}}°C."
-        
-        state: Yes
-            q: * (Да|да) *
-            go: "Start"
-        state: No
-            q: * (нет|Нет) *
-            go: "Bye"
-
-    state: WeatherError
-        event!: httpError
-        a: "Не удалось получить данные о погоде. Попробуйте снова."
-        go: "Start"
-
-    state: NoMatch
+    state: CatchAll || noContext=true
         event!: noMatch
-        a: "Я не понял. Повторите Ваш запрос."
-
-    state: Bye
-        intent!: /пока
-        a: "До свидания."
+        a: Извините, я вас не понимаю, зато могу рассказать о погоде. Введите название города
+        go: /GetWeather

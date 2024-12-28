@@ -1,15 +1,21 @@
-name: zb-cailapub
+# Название проекта
+name: weather-api
+# Точка входа
+entryPoint:
+  - main.sc
 
-entryPoint: main.sc
-
+# Параметры NLU:
 botEngine: v2
 language: ru
 
-tests:
-  include:
-    - test.xml
-
 nlp:
-  intentNoMatchThresholds:
-    phrases: 0.2
-    patterns: 0.2
+    intentNoMatchThresholds:
+        phrases: 0.2
+        patterns: 0.2
+
+injector:
+    api_key: 'de907e53b9a4691b221ea39abe59380c'
+    slotfilling:
+        maxSlotRetries: 2
+        stopOnAnyIntent: false
+        stopOnAnyIntentThreshold: 0.2
