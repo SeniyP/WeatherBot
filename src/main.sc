@@ -17,9 +17,9 @@ theme: /
             if ($session.city) {
                 # Делаем запрос на погоду
                 HttpRequest:
-                    url = http://api.weatherapi.com/v1/current.json
-                    method = GET
-                    body = {"key": "50aa229c887e47dd8c631208240411", "q": $session.city.trim()}
+                    url = "http://api.weatherapi.com/v1/current.json?key=50aa229c887e47dd8c631208240411&q=" + $session.city.trim()
+                    method = "GET"
+                    body = ""
                     okState = /WeatherResponse
                     errorState = /WeatherError
                     timeout = 0
