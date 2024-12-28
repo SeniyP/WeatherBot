@@ -56,7 +56,6 @@ theme: /
 
     state: forecast
         intent!: /forecast
-        entity!: date
         script:
             var city = $caila.inflect($parseTree._geo, ["nomn"]);
             var targetDate = $caila.inflect($parseTree._date, ["datv"]);
