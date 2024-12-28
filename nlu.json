@@ -12,7 +12,7 @@
     "extendedSettings" : {
       "classificationAlgorithmVersion" : 1.0,
       "tokenizerEngine" : "mystem",
-      "allowedPatterns" : [ "geo" ],
+      "allowedPatterns" : [ "city" ],
       "useShared" : false
     },
     "shared" : false,
@@ -24,10 +24,12 @@
     }
   },
   "intents" : [ {
-    "path" : "/geo",
+    "path" : "/weather",
     "enabled" : true,
     "shared" : false,
-    "phrases" : [ ],
+    "phrases" : [ {
+      "text" : "@mystem.geo"
+    } ],
     "classificationRules" : {
       "refs" : [ ]
     },
@@ -36,7 +38,7 @@
       "name" : "geo",
       "entity" : "mystem.geo",
       "required" : true,
-      "prompts" : [ ]
+      "prompts" : [ "В каком городе вы хотели бы узнать прогноз погоды?" ]
     } ],
     "priority" : 0
   }, {
@@ -64,7 +66,7 @@
   } ],
   "entities" : [ {
     "entity" : {
-      "name" : "geo",
+      "name" : "city",
       "enabled" : true,
       "shared" : false,
       "type" : "annotation",
@@ -73,7 +75,7 @@
       "noMorph" : false,
       "phoneticSearch" : false,
       "fuzzySearch" : true,
-      "client" : true,
+      "client" : false,
       "hidden" : false
     },
     "records" : [ {
@@ -89,8 +91,23 @@
       "rule" : [ "Иркутск" ],
       "value" : ""
     } ]
+  }, {
+    "entity" : {
+      "name" : "activity",
+      "enabled" : true,
+      "shared" : false,
+      "type" : "annotation",
+      "priority" : 1,
+      "noSpelling" : true,
+      "noMorph" : false,
+      "phoneticSearch" : false,
+      "fuzzySearch" : false,
+      "client" : false,
+      "hidden" : false
+    },
+    "records" : [ ]
   } ],
-  "enabledSystemEntities" : [ "mystem.geo", "duckling.number", "duckling.time", "duckling.duration", "duckling.phone-number", "duckling.email", "duckling.url" ],
+  "enabledSystemEntities" : [ "mystem.geo", "pymorphy.geox", "duckling.number", "duckling.time", "duckling.date", "duckling.time-of-day", "duckling.duration", "duckling.phone-number", "duckling.email", "duckling.url" ],
   "spellerDictionary" : [ ],
   "systemEntities" : [ {
     "name" : "mystem.geo",
@@ -133,7 +150,7 @@
     "enabled" : false
   }, {
     "name" : "pymorphy.geox",
-    "enabled" : false
+    "enabled" : true
   }, {
     "name" : "pymorphy.orgn",
     "enabled" : false
@@ -160,11 +177,11 @@
   }, {
     "name" : "duckling.date",
     "version" : "v2",
-    "enabled" : false
+    "enabled" : true
   }, {
     "name" : "duckling.time-of-day",
     "version" : "v2",
-    "enabled" : false
+    "enabled" : true
   }, {
     "name" : "duckling.duration",
     "version" : "v2",
