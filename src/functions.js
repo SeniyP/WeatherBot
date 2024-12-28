@@ -11,3 +11,14 @@ return $http.get("http://api.openweathermap.org/data/2.5/weather?APPID=${APPID}&
         }
     });
 }
+function openWeatherMapForecast(units, lang, q, date) {
+    return $http.get("http://api.openweathermap.org/data/2.5/forecast?APPID=${OPENWEATHERMAP_API_KEY}&units=${units}&lang=${lang}&q=${q}", {
+        timeout: 10000,
+        query: {
+            APPID: OPENWEATHERMAP_API_KEY,
+            units: units,
+            lang: lang,
+            q: q
+        }
+    });
+}
