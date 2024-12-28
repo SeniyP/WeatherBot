@@ -11,7 +11,7 @@ theme: /
         a: Сейчас уточню погоду для города {{$context.entities.city}}...
         script:
             // Получение города из сущности
-            $city = $context.entities.city;
+            $city = $context.entities.city[0]; // Используем первый элемент из массива сущностей, если их несколько
             
             // Проверка наличия города
             if ($city) {
