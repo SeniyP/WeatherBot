@@ -25,7 +25,6 @@ theme: /
                     body = ""
                     okState = "WeatherResponse"
                     errorState = "WeatherError"
-                    timeout = 5000  # Таймаут не поддерживается в данной среде, убираем
                     headers = []
 
             } else {
