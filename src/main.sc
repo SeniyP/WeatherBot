@@ -1,6 +1,6 @@
 require: slotfilling/slotFilling.sc
   module = sys.zb-common
-theme: /  # Указание темы должно быть до всех состояний
+theme: /  # Тема должна быть указана в самом начале
 
 state: Start
     q!: $regex</start>
