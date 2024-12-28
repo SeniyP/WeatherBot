@@ -9,14 +9,12 @@ theme: /
         a: Привет! Я могу рассказать тебе о погоде в любом городе. Просто спроси меня о погоде в каком-либо городе!
 
     state: GetWeather
-        event!: textEvent
+        event!: intentEvent
+        entities:
+            - city
         scriptEs6:
-            const userQuery = $request.data.text.toLowerCase();  // Приводим запрос к нижнему регистру
-            const cityRegex = /погода в ([а-яё\s]+)/;  // Регулярное выражение для поиска города с кириллицей
-            const match = userQuery.match(cityRegex);  // Ищем название города в запросе
-            
-            if (match && match[1]) {
-                const city = match[1].trim();  // Извлекаем город из запроса и удаляем лишние пробелы
+            const city = $request.data.entities.city;  // Извлекаем город из сущности
+            if (city) {
                 try {
                     const weatherData = await weatherAPI.getWeather(city);
                     const { temperature, condition } = weatherData;

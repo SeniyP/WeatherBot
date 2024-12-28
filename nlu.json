@@ -61,8 +61,6 @@
       "text" : "Какая температура в Москве?"
     }, {
       "text" : "Какую погоду ожидают в Киеве?"
-    }, {
-      "text" : "Что с погодой в {city}"
     } ],
     "classificationRules" : {
       "refs" : [ ]
@@ -73,26 +71,6 @@
       "entity" : "city",
       "required" : true,
       "prompts" : [ "Что с погодой в {city}" ]
-    } ],
-    "priority" : 0
-  }, {
-    "path" : "/RequestWeather",
-    "enabled" : false,
-    "shared" : false,
-    "phrases" : [ {
-      "text" : "Какая погода в Москве?"
-    }, {
-      "text" : "Что в погоде в Санкт-Петербурге?"
-    } ],
-    "classificationRules" : {
-      "refs" : [ ]
-    },
-    "patterns" : [ ],
-    "slots" : [ {
-      "name" : "city",
-      "entity" : "city",
-      "required" : true,
-      "prompts" : [ ]
     } ],
     "priority" : 0
   } ],
