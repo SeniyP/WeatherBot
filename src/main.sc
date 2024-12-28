@@ -56,6 +56,7 @@ theme: /
 
     state: forecast
         intent!: /forecast
+        entity!: date
         script:
             var city = $caila.inflect($parseTree._geo, ["nomn"]);
             var targetDate = $caila.inflect($parseTree._date, ["datv"]);
@@ -67,7 +68,7 @@ theme: /
                     $reactions.answer("Не удалось получить прогноз на выбранную дату.");
                 }
             }).catch(function (err) {
-                $reactions.answer("Что-то пошло не так. Повторите попытку позже.");
+                $reactions.answer("Что-то пошло не так. Повторите попытку позже. Детали ошибки: " + err.message);
             });
 
     state: CatchAll || noContext=true

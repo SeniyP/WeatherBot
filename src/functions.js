@@ -41,6 +41,7 @@ function openWeatherMapForecast(units, lang, q, date) {
 }
 
 function getWeatherForSpecificDate(units, lang, city, targetDate) {
+    console.log("Получаем прогноз для города: " + city + " на дату: " + targetDate); // Для отладки
     return $http.get("http://api.openweathermap.org/data/2.5/forecast?APPID=${APPID}&units=${units}&lang=${lang}&q=${city}", {
         timeout: 10000,
         query: {
@@ -51,15 +52,13 @@ function getWeatherForSpecificDate(units, lang, city, targetDate) {
         }
     }).then(function (response) {
         if (response && response.data && response.data.list) {
-            // Получаем все данные с прогнозом
             var forecastData = response.data.list;
 
-            // Преобразуем targetDate в объект Date
-            var targetDateObj = new Date(targetDate);
+            var targetDateObj = new Date(targetDate); // Преобразуем строку даты в объект Date
+            console.log("Ищем прогноз для даты:", targetDateObj);
 
-            // Ищем ближайший прогноз, который соответствует дате
             var selectedForecast = forecastData.find(function (forecast) {
-                var forecastDate = new Date(forecast.dt * 1000); // Время из API в секундах, преобразуем в миллисекунды
+                var forecastDate = new Date(forecast.dt * 1000); // Преобразуем временную метку из API
                 return forecastDate.toDateString() === targetDateObj.toDateString();
             });
 
@@ -79,6 +78,7 @@ function getWeatherForSpecificDate(units, lang, city, targetDate) {
             throw new Error("Ошибка получения данных о погоде.");
         }
     }).catch(function (err) {
+        console.error("Ошибка при запросе прогноза:", err); // Выводим подробную информацию об ошибке
         $reactions.answer("Произошла ошибка при запросе данных о погоде: " + err.message);
         return null;
     });
