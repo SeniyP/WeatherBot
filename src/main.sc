@@ -8,13 +8,12 @@ theme: /
 
     state: Weather
         intent!: /Погода
-        a: Сейчас уточню погоду для города {{$context.entities.city}}...
         script:
-            $city = $context.entities.city;
-            if ($city) {
+            $session.city = $context.entities.city;
+            if ($session.city) {
                 $http.get("http://api.weatherapi.com/v1/current.json", {
                     "key": "50aa229c887e47dd8c631208240411",
-                    "q": $city.trim()
+                    "q": $session.city.trim()
                 });
             } else {
                 $reactions.say("Пожалуйста, уточните город, например: \"Какая погода в Москве?\"");
