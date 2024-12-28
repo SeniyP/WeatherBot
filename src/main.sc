@@ -26,7 +26,7 @@ theme: /
                     headers = []
             } else {
                 a: "Пожалуйста, уточните город, например: 'Какая погода в Москве?'"
-                go!: "NoMatch"
+                go: "NoMatch"
             }
 
     state: WeatherResponse
@@ -43,15 +43,15 @@ theme: /
 
         state: Yes
             q: * (Да|да) *
-            go!: "Start"
+            go: "Start"
         state: No
             q: * (нет|Нет) *
-            go!: "Bye"
+            go: "Bye"
 
     state: WeatherError
         event!: httpError
         a: "Не удалось получить данные о погоде. Проверьте название города или попробуйте позже."
-        go!: "Start"
+        go: "Start"
 
     state: NoMatch
         event!: noMatch
