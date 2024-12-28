@@ -16,7 +16,7 @@ theme: /
                     "q": $session.city.trim()
                 });
             } else {
-                actions.reply("Пожалуйста, уточните город, например: \"Какая погода в Москве?\"");
+                a: Пожалуйста, уточните город, например: "Какая погода в Москве?"
                 $reactions.go("/NoMatch");
             }
 
@@ -27,13 +27,12 @@ theme: /
             $location = $data.location.name;
             $temp = $data.current.temp_c;
             $condition = $data.current.condition.text;
-            actions.reply("Сейчас в {{$location}}: {{$temp}}°C, {{$condition}}.");  // Ответ пользователю
-        a:
+            a: Сейчас в {{$location}}: {{$temp}}°C, {{$condition}}.  // Ответ пользователю
 
     state: WeatherError
         event!: httpError
-        actions.reply("Не удалось получить данные о погоде. Проверьте название города или попробуйте позже.");
+        a: Не удалось получить данные о погоде. Проверьте название города или попробуйте позже.
 
     state: NoMatch
         event!: noMatch
-        actions.reply("Я не понял. Вы сказали: {{$request.query}}");
+        a: Я не понял. Вы сказали: {{$request.query}}
