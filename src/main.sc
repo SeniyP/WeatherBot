@@ -67,7 +67,8 @@ theme: /
                     $reactions.answer("Не удалось получить прогноз на выбранную дату.");
                 }
             }).catch(function (err) {
-                $reactions.answer("Что-то пошло не так. Повторите попытку позже. Детали ошибки: " + err.message);
+                var errorMessage = err && err.message ? err.message : "Неизвестная ошибка.";
+                $reactions.answer("Что-то пошло не так. Повторите попытку позже. Детали ошибки: " + errorMessage);
             });
 
     state: CatchAll || noContext=true

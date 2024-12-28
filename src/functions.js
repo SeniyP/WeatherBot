@@ -80,7 +80,8 @@ function getWeatherForSpecificDate(units, lang, city, targetDate) {
             throw new Error("Ошибка получения данных о погоде.");
         }
     }).catch(function (err) {
-        $reactions.answer("Произошла ошибка при запросе данных о погоде: " + err.message);
+        var errorMessage = err && err.message ? err.message : "Неизвестная ошибка.";
+        $reactions.answer("Произошла ошибка при запросе данных о погоде: " + errorMessage);
         return null;
     });
 }
