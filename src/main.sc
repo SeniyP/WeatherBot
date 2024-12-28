@@ -54,27 +54,6 @@ theme: /
                 $reactions.answer("Что-то сервер барахлит. Не могу узнать полную информацию о погоде.");
             });
 
-    state: forecast
-        intent!: /forecast
-        script:
-
-            var city = $caila.inflect($parseTree._geo, ["nomn"]);
-            var targetDate = $caila.inflect($parseTree._date, ["datv"]);
-    
-            // Преобразуем объект даты в строку формата YYYY-MM-DD
-            var targetDateStr = new Date(targetDate).toISOString().split('T')[0]; // Преобразуем в формат 'YYYY-MM-DD'
-    
-            getWeatherForSpecificDate("metric", "ru", city, targetDateStr).then(function (forecast) {
-                if (forecast) {
-                    $reactions.answer("Прогноз на " + forecast.date + " для города " + forecast.city + ": " + forecast.description + ", температура: " + forecast.temperature);
-                } else {
-                    $reactions.answer("Не удалось получить прогноз на выбранную дату.");
-                }
-            }).catch(function (err) {
-                var errorMessage = err && err.message ? err.message : "Неизвестная ошибка.";
-                $reactions.answer("Что-то пошло не так. Повторите попытку позже. Детали ошибки: " + errorMessage);
-            });
-
     state: CatchAll || noContext=true
         event!: noMatch
         a: Извините, я вас не понимаю, зато могу рассказать о погоде. Введите название города
