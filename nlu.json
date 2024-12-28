@@ -12,6 +12,7 @@
     "extendedSettings" : {
       "classificationAlgorithmVersion" : 1.0,
       "tokenizerEngine" : "mystem",
+      "allowedPatterns" : [ "city" ],
       "useShared" : false
     },
     "shared" : false,
@@ -83,8 +84,8 @@
       "noSpelling" : true,
       "noMorph" : false,
       "phoneticSearch" : false,
-      "fuzzySearch" : false,
-      "client" : false,
+      "fuzzySearch" : true,
+      "client" : true,
       "hidden" : false
     },
     "records" : [ {

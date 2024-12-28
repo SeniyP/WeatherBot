@@ -27,6 +27,7 @@ theme: /
                     errorState = "WeatherError"
                     timeout = 0
                     headers = []
+
             } else {
                 a: "Пожалуйста, уточните город, например: 'Какая погода в Москве?'"
                 go: "NoMatch"
@@ -35,17 +36,24 @@ theme: /
     state: WeatherResponse
         event!: httpSuccess
         script:
+            # Логируем полученный ответ от API для отладки
+            a: "Ответ от API: {{$response.body}}"
+            
             # Разбираем полученный ответ от API
             $data = $parse.json($response.body);
-            $location = $data.location.name;
-            $temp = $data.current.temp_c;
-            $condition = $data.current.condition.text;
-
-            # Логирование для отладки
-            a: "Полученные данные: {{$response.body}}"
             
-            a: "Сейчас в {{$location}}: {{$temp}}°C, {{$condition}}."
-        
+            # Проверяем, есть ли ошибка в ответе API
+            if ($data.error) {
+                a: "Не удалось получить данные о погоде для города {{$session.city}}. Ошибка: {{$data.error.message}}"
+                go: "WeatherError"
+            } else {
+                $location = $data.location.name;
+                $temp = $data.current.temp_c;
+                $condition = $data.current.condition.text;
+
+                a: "Сейчас в {{$location}}: {{$temp}}°C, {{$condition}}."
+            }
+
         inlineButtons:
             {text: "Перейти на сайт погоды", url: "https://www.weatherapi.com"}
 
