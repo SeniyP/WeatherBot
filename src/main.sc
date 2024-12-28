@@ -9,11 +9,11 @@ theme: /
     state: Weather
         intent!: /Погода
         script:
-            $city = $context.entities.city; // Извлекаем город из сущности
-            if ($city) {
+            $session.city = $context.entities.city; // Используем сессионную переменную
+            if ($session.city) {
                 $http.get("http://api.weatherapi.com/v1/current.json", {
                     "key": "50aa229c887e47dd8c631208240411",
-                    "q": $city.trim()
+                    "q": $session.city.trim()
                 });
             } else {
                 $response.say("Пожалуйста, уточните город, например: \"Какая погода в Москве?\"");
