@@ -54,6 +54,36 @@ theme: /
                 $reactions.answer("Что-то сервер барахлит. Не могу узнать полную информацию о погоде.");
             });
 
+    state: forecast
+        intent!: /forecast
+        script:
+            var city = $caila.inflect($parseTree._geo, ["nomn"]);
+            var date = $parseTree._date;  // Получаем дату из запроса пользователя
+            openWeatherMapForecast("metric", "ru", city, date).then(function (res) {
+                if (res && res.list) {
+                    // Находим прогноз на ближайшее время
+                    var forecastData = res.list.find(function (entry) {
+                        var forecastDate = new Date(entry.dt * 1000);
+                        return forecastDate.toDateString() === new Date(date).toDateString();
+                    });
+    
+                    if (forecastData) {
+                        var temperature = Math.round(forecastData.main.temp);
+                        var description = forecastData.weather[0].description;
+    
+                        $reactions.answer("Прогноз погоды в городе " + capitalize(city) + " на " + date + ":");
+                        $reactions.answer("Температура: " + temperature + "°C");
+                        $reactions.answer("Описание погоды: " + description);
+                    } else {
+                        $reactions.answer("Не могу найти прогноз на указанную дату.");
+                    }
+                } else {
+                    $reactions.answer("Что-то сервер барахлит. Не могу узнать прогноз.");
+                }
+            }).catch(function (err) {
+                $reactions.answer("Что-то сервер барахлит. Не могу узнать прогноз.");
+            });
+
     state: CatchAll || noContext=true
         event!: noMatch
         a: Извините, я вас не понимаю, зато могу рассказать о погоде. Введите название города
