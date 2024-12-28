@@ -2,6 +2,9 @@ require: weather-api.js
     type = scriptEs6
     name = weatherApi
 
+// Укажите тему на первом месте
+theme: /
+
 state: WeatherRequest
     intent!: /Погода
     scriptEs6:
