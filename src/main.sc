@@ -2,20 +2,36 @@ require: slotfilling/slotFilling.sc
   module = sys.zb-common
 theme: /
 
+intents:
+  - /погода
+    examples:
+      - Какая погода в {city}
+      - Погода в {city}
+      - Что с погодой в {city}
+      - Как там погода в {city}
+
+entities:
+  - city: 
+      examples:
+        - Москва
+        - Санкт-Петербург
+        - Лондон
+        - Париж
+
+states:
     state: Start
         q!: $regex</start>
         a: Привет! Я могу рассказать погоду. Просто спросите, например: "Какая погода в Москве?"
 
     state: Weather
         intent!: /погода
-        a: Сейчас уточню погоду...
+        a: Сейчас уточню погоду для города {{$context.entities.city}}...
         script:
-            // Извлекаем город из запроса
-            $city = $request.query.match(/в\s+(.+)/);
-            if ($city && $city[1]) {
+            $city = $context.entities.city;
+            if ($city) {
                 $http.get("http://api.weatherapi.com/v1/current.json", {
                     "key": "50aa229c887e47dd8c631208240411",
-                    "q": $city[1].trim()
+                    "q": $city.trim()
                 });
             } else {
                 $reactions.say("Пожалуйста, уточните город, например: \"Какая погода в Москве?\"");
