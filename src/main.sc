@@ -3,8 +3,8 @@ require: functions.js
 theme: /
 
     state: Start
-        q!: $regex</start>
-        a: Привет! Я электронный помощник. Я могу сообщить вам текущую погоду в любом городе. Напишите город.
+    q!: $regex</start>
+    a: Привет! Я электронный помощник. Я могу сообщить вам текущую погоду в любом городе. Напишите город.
 
     state: GetWeather
         intent!: /geo
@@ -12,11 +12,11 @@ theme: /
             var city = $caila.inflect($parseTree._geo, ["nomn"]);
             openWeatherMapCurrent("metric", "ru", city).then(function (res) {
                 if (res && res.weather) {
-                    $reactions.answer("Сегодня в городе " + capitalize(city) + " " + res.weather[0].description + ", " + Math.round(res.main.temp) + "°C" );
-                    if(res.weather[0].main == 'Rain' || res.weather[0].main == 'Drizzle') {
-                        $reactions.answer("Советую захватить с собой зонтик!")
+                    $reactions.answer("Сегодня в городе " + capitalize(city) + " " + res.weather[0].description + ", " + Math.round(res.main.temp) + "°C");
+                    if (res.weather[0].main == 'Rain' || res.weather[0].main == 'Drizzle') {
+                        $reactions.answer("Советую захватить с собой зонтик!");
                     } else if (Math.round(res.main.temp) < 0) {
-                        $reactions.answer("Бррррр ну и мороз")
+                        $reactions.answer("Бррррр ну и мороз!");
                     }
                 } else {
                     $reactions.answer("Что-то сервер барахлит. Не могу узнать погоду.");
@@ -24,7 +24,34 @@ theme: /
             }).catch(function (err) {
                 $reactions.answer("Что-то сервер барахлит. Не могу узнать погоду.");
             });
-
+    
+    state: fullgeo
+        intent!: /fullgeo
+        script:
+            var city = $caila.inflect($parseTree._geo, ["nomn"]);
+            openWeatherMapCurrent("metric", "ru", city).then(function (res) {
+                if (res && res.weather) {
+                    var temperature = Math.round(res.main.temp);
+                    var humidity = res.main.humidity;
+                    var pressure = res.main.pressure;
+                    var windSpeed = res.wind.speed;
+                    var description = res.weather[0].description;
+                    var windDirection = res.wind.deg;
+    
+                    $reactions.answer("Полная информация о погоде в городе " + capitalize(city) + ":");
+                    $reactions.answer("Температура: " + temperature + "°C");
+                    $reactions.answer("Влажность: " + humidity + "%");
+                    $reactions.answer("Давление: " + pressure + " гПа");
+                    $reactions.answer("Скорость ветра: " + windSpeed + " м/с");
+                    $reactions.answer("Направление ветра: " + windDirection + "°");
+                    $reactions.answer("Описание погоды: " + description);
+                } else {
+                    $reactions.answer("Что-то сервер барахлит. Не могу узнать полную информацию о погоде.");
+                }
+            }).catch(function (err) {
+                $reactions.answer("Что-то сервер барахлит. Не могу узнать полную информацию о погоде.");
+            });
+    
     state: CatchAll || noContext=true
         event!: noMatch
         a: Извините, я вас не понимаю, зато могу рассказать о погоде. Введите название города
