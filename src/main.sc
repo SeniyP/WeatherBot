@@ -57,10 +57,14 @@ theme: /
     state: forecast
         intent!: /forecast
         script:
+
             var city = $caila.inflect($parseTree._geo, ["nomn"]);
             var targetDate = $caila.inflect($parseTree._date, ["datv"]);
-            
-            getWeatherForSpecificDate("metric", "ru", city, targetDate).then(function (forecast) {
+    
+            // Преобразуем объект даты в строку формата YYYY-MM-DD
+            var targetDateStr = new Date(targetDate).toISOString().split('T')[0]; // Преобразуем в формат 'YYYY-MM-DD'
+    
+            getWeatherForSpecificDate("metric", "ru", city, targetDateStr).then(function (forecast) {
                 if (forecast) {
                     $reactions.answer("Прогноз на " + forecast.date + " для города " + forecast.city + ": " + forecast.description + ", температура: " + forecast.temperature);
                 } else {
