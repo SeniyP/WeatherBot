@@ -61,6 +61,8 @@
       "text" : "Какая температура в Москве?"
     }, {
       "text" : "Какую погоду ожидают в Киеве?"
+    }, {
+      "text" : "Что с погодой в {city}"
     } ],
     "classificationRules" : {
       "refs" : [ ]
@@ -70,7 +72,7 @@
       "name" : "city",
       "entity" : "city",
       "required" : true,
-      "prompts" : [ "Какая погода в {city}", "Погода в {city}", "Как там погода в {city}", "Что с погодой в {city}" ]
+      "prompts" : [ "Что с погодой в {city}" ]
     } ],
     "priority" : 0
   } ],

@@ -25,7 +25,7 @@ theme: /
                     body = ""
                     okState = "WeatherResponse"
                     errorState = "WeatherError"
-                    timeout = 0
+                    timeout = 5000  # Таймаут на 5 секунд
                     headers = []
 
             } else {
@@ -38,6 +38,12 @@ theme: /
         script:
             # Логируем полученный ответ от API для отладки
             a: "Ответ от API: {{$response.body}}"
+            
+            # Проверяем, что мы получаем ответ от API
+            if ($response.body == "") {
+                a: "Ответ от API пустой. Повторите попытку."
+                go: "WeatherError"
+            }
             
             # Разбираем полученный ответ от API
             $data = $parse.json($response.body);
