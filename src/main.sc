@@ -10,7 +10,10 @@ theme: /
         intent!: /Погода
         a: Сейчас уточню погоду для города {{$context.entities.city}}...
         script:
+            // Получение города из сущности
             $city = $context.entities.city;
+            
+            // Проверка наличия города
             if ($city) {
                 // Запрос к API погоды
                 $http.get("http://api.weatherapi.com/v1/current.json", {
@@ -18,6 +21,7 @@ theme: /
                     "q": $city.trim()
                 });
             } else {
+                // Ответ, если город не найден
                 $reactions.say("Пожалуйста, уточните город, например: \"Какая погода в Москве?\"");
                 $reactions.go("/NoMatch");
             }
