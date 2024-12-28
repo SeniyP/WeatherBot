@@ -1,44 +1,37 @@
-require: weather-api.js
+require: js/axios.js
     type = scriptEs6
-    name = weatherApi
+    name = axios
 
 theme: /
 
     state: Start
-        q!: $regex</start>
-        a: Привет! Я могу рассказать погоду. Просто скажите, например: 'Какая погода в Москве?'
+        q!: $regexp</start>
+        a: Привет! Я могу рассказать вам погоду в любом городе. Просто напишите, например: "Какая погода в Москве?"
 
-    state: WeatherRequest
-        intent!: /Погода
+    state: Weather
+        q!: /Какая погода в (.+)/
         scriptEs6:
-            const city = $context.entities.city;
-            if (!city) {
-                $reactions.answer("Пожалуйста, уточните город, например: 'Какая погода в Москве?'");
-                return;
-            }
-
-            try {
-                // Получаем данные о погоде для указанного города
-                const weatherData = await weatherApi.getWeather(city);
-
-                if (!weatherData) {
+            const city = $parseTree.text.match(/Какая погода в (.+)/)[1].trim();
+            $session.city = city;
+            $http.get(`http://api.weatherapi.com/v1/current.json?key=50aa229c887e47dd8c631208240411&q=${city}`)
+                .then(response => {
+                    const data = response.data;
+                    const location = data.location.name;
+                    const temp = data.current.temp_c;
+                    const condition = data.current.condition.text;
+                    $reactions.answer(`Сейчас в ${location}: ${temp}°C, ${condition}.`);
+                })
+                .catch(error => {
                     $reactions.answer("Не удалось получить данные о погоде. Проверьте название города или попробуйте позже.");
-                    return;
-                }
+                });
+            go!: /AnythingElse
 
-                const location = weatherData.location.name;
-                const temp = weatherData.current.temp_c;
-                const condition = weatherData.current.condition.text;
+    state: AnythingElse
+        a: Хотите узнать погоду в другом городе?
+        buttons:
+            "Да"
+            "Нет"
 
-                $reactions.answer(`Сейчас в ${location}: ${temp}°C, ${condition}.`);
-            } catch (e) {
-                $reactions.answer("Произошла ошибка при получении данных о погоде. Попробуйте позже.");
-            }
-
-    state: NoMatch || noContext = true
+    state: NoMatch
         event!: noMatch
-        a: Извините, я не понял. Пожалуйста, уточните запрос, например: 'Какая погода в Москве?'
-
-    state: WeatherError || noContext = true
-        event!: httpError
-        a: Не удалось получить данные о погоде. Попробуйте позже!
+        a: Я не понял. Могу рассказать вам погоду, например, в "Москва". Напишите "Какая погода в [город]?"

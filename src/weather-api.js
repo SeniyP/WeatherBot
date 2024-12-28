@@ -28,7 +28,7 @@ async function getWeather(city) {
     }
 }
 
-// Экспортируем функцию для использования в других частях бота
-module.exports = {
+// Экспортируем функцию как default
+export default {
     getWeather,
 };
