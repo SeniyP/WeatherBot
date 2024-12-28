@@ -7,7 +7,7 @@ theme: /
         a: Привет! Я могу рассказать погоду. Просто спросите, например: "Какая погода в Москве?"
 
     state: Weather
-        intent!: /погода
+        intent!: /Погода
         a: Сейчас уточню погоду для города {{$context.entities.city}}...
         script:
             $city = $context.entities.city;
@@ -23,7 +23,13 @@ theme: /
 
     state: WeatherResponse
         event!: httpSuccess
-        a: Сейчас в {{$parse.json($response.body).location.name}}: {{$parse.json($response.body).current.temp_c}}°C, {{$parse.json($response.body).current.condition.text}}.
+        script:
+            $data = $parse.json($response.body);
+            $location = $data.location.name;
+            $temp = $data.current.temp_c;
+            $condition = $data.current.condition.text;
+            $reactions.say("Сейчас в {{$location}}: {{$temp}}°C, {{$condition}}.");
+        a: 
 
     state: WeatherError
         event!: httpError

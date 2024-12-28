@@ -44,8 +44,63 @@
       "refs" : [ ]
     },
     "priority" : 0
+  }, {
+    "path" : "/Погода",
+    "enabled" : true,
+    "shared" : false,
+    "phrases" : [ {
+      "text" : "Какая погода в Москве?"
+    }, {
+      "text" : "Погода в Санкт-Петербурге?"
+    }, {
+      "text" : "Что с погодой в Лондоне?"
+    }, {
+      "text" : "Как там погода в Париже?"
+    }, {
+      "text" : "Какая температура в Москве?"
+    }, {
+      "text" : "Какую погоду ожидают в Киеве?"
+    } ],
+    "classificationRules" : {
+      "refs" : [ ]
+    },
+    "patterns" : [ ],
+    "slots" : [ {
+      "name" : "city",
+      "entity" : "city",
+      "required" : true,
+      "prompts" : [ "Какая погода в {city}", "Погода в {city}", "Как там погода в {city}", "Что с погодой в {city}" ]
+    } ],
+    "priority" : 0
   } ],
-  "entities" : [ ],
+  "entities" : [ {
+    "entity" : {
+      "name" : "city",
+      "enabled" : true,
+      "shared" : false,
+      "type" : "annotation",
+      "priority" : 1,
+      "noSpelling" : true,
+      "noMorph" : false,
+      "phoneticSearch" : false,
+      "fuzzySearch" : false,
+      "client" : false,
+      "hidden" : false
+    },
+    "records" : [ {
+      "type" : "synonyms",
+      "rule" : [ "Москва" ],
+      "value" : ""
+    }, {
+      "type" : "synonyms",
+      "rule" : [ "Питер", "Питере", "СБП" ],
+      "value" : ""
+    }, {
+      "type" : "synonyms",
+      "rule" : [ "Иркутск" ],
+      "value" : ""
+    } ]
+  } ],
   "enabledSystemEntities" : [ "duckling.number", "duckling.time", "duckling.duration", "duckling.phone-number", "duckling.email", "duckling.url" ],
   "spellerDictionary" : [ ],
   "systemEntities" : [ {
