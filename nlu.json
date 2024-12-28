@@ -47,6 +47,8 @@
     "shared" : false,
     "phrases" : [ {
       "text" : "Какая погода будет в @mystem.geo в @duckling.time"
+    }, {
+      "text" : "Какая погода будет в @mystem.geo @duckling.date"
     } ],
     "classificationRules" : {
       "refs" : [ ]
@@ -162,7 +164,7 @@
     },
     "records" : [ ]
   } ],
-  "enabledSystemEntities" : [ "mystem.geo", "pymorphy.geox", "duckling.number", "duckling.time", "duckling.date", "duckling.time-of-day", "duckling.duration", "duckling.phone-number", "duckling.email", "duckling.url" ],
+  "enabledSystemEntities" : [ "mystem.geo", "pymorphy.geox", "duckling.number", "duckling.time", "duckling.time-of-day", "duckling.duration", "duckling.phone-number", "duckling.email", "duckling.url", "duckling.date" ],
   "spellerDictionary" : [ ],
   "systemEntities" : [ {
     "name" : "mystem.geo",
@@ -230,10 +232,6 @@
     "version" : "v2",
     "enabled" : true
   }, {
-    "name" : "duckling.date",
-    "version" : "v2",
-    "enabled" : true
-  }, {
     "name" : "duckling.time-of-day",
     "version" : "v2",
     "enabled" : true
@@ -266,6 +264,10 @@
   }, {
     "name" : "zb.number",
     "enabled" : false
+  }, {
+    "name" : "duckling.date",
+    "version" : "v2",
+    "enabled" : true
   } ],
   "faq" : [ ],
   "skills" : [ ]

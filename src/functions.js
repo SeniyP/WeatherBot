@@ -20,5 +20,15 @@ function openWeatherMapForecast(units, lang, q, date) {
             lang: lang,
             q: q
         }
+    }).then(function(res) {
+        if (res && res.data && res.data.list) {
+            console.log("Получен прогноз:", res.data);
+            return res.data;
+        } else {
+            throw new Error("Нет данных в ответе от API.");
+        }
+    }).catch(function(err) {
+        console.error("Ошибка при запросе прогноза:", err);
+        throw new Error("Не могу получить прогноз. Проверьте запрос.");
     });
 }
