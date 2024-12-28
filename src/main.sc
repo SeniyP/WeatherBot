@@ -27,3 +27,7 @@ state: WeatherRequest
         } catch (e) {
             $reactions.answer("Произошла ошибка при получении данных о погоде. Попробуйте позже.");
         }
+
+state: NoMatch || noContext = true
+    event!: noMatch
+    a: Я не понимаю. Пожалуйста, задайте вопрос о погоде, например: "Какая погода в Москве?"
