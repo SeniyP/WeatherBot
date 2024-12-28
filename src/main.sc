@@ -58,10 +58,10 @@ theme: /
         intent!: /forecast
         script:
             var city = $caila.inflect($parseTree._geo, ["nomn"]);
-            var date = $parseTree._date;  // Получаем дату из запроса пользователя
+            var date = $parseTree._date;  // Извлекаем дату из запроса пользователя
             openWeatherMapForecast("metric", "ru", city, date).then(function (res) {
                 if (res && res.list) {
-                    // Находим прогноз на ближайшее время
+                    // Ищем прогноз на указанную дату
                     var forecastData = res.list.find(function (entry) {
                         var forecastDate = new Date(entry.dt * 1000);
                         return forecastDate.toDateString() === new Date(date).toDateString();
