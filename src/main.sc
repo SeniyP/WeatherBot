@@ -8,27 +8,27 @@ theme: /
 
     state: Weather
         intent!: /Погода
-        a: Сейчас уточню погоду для города {{$context.entities.city}}...
         script:
-            // Получение города из сущности
-            $city = $context.entities.city[0]; // Используем первый элемент из массива сущностей, если их несколько
-            
-            // Проверка наличия города
-            if ($city) {
-                // Запрос к API погоды
+            $session.city = $context.entities.city;
+            if ($session.city) {
                 $http.get("http://api.weatherapi.com/v1/current.json", {
-                    "key": "50aa229c887e47dd8c631208240411",  // Твой API-ключ
-                    "q": $city.trim()
+                    "key": "50aa229c887e47dd8c631208240411",
+                    "q": $session.city.trim()
                 });
             } else {
-                // Ответ, если город не найден
-                $reactions.say("Пожалуйста, уточните город, например: \"Какая погода в Москве?\"");
+                $actions.say("Пожалуйста, уточните город, например: \"Какая погода в Москве?\"");
                 $reactions.go("/NoMatch");
             }
 
     state: WeatherResponse
         event!: httpSuccess
-        a: Сейчас в {{$parse.json($response.body).location.name}}: {{$parse.json($response.body).current.temp_c}}°C, {{$parse.json($response.body).current.condition.text}}.
+        script:
+            $data = $parse.json($response.body);
+            $location = $data.location.name;
+            $temp = $data.current.temp_c;
+            $condition = $data.current.condition.text;
+            $actions.say("Сейчас в {{$location}}: {{$temp}}°C, {{$condition}}.");
+        a: 
 
     state: WeatherError
         event!: httpError
