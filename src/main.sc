@@ -8,12 +8,14 @@ theme: /
 
     state: Weather
         intent!: /Погода
+        a: Сейчас уточню погоду для города {{$context.entities.city}}...
         script:
-            $session.city = $context.entities.city;
-            if ($session.city) {
+            $city = $context.entities.city;
+            if ($city) {
+                // Запрос к API погоды
                 $http.get("http://api.weatherapi.com/v1/current.json", {
-                    "key": "50aa229c887e47dd8c631208240411",
-                    "q": $session.city.trim()
+                    "key": "50aa229c887e47dd8c631208240411",  // Твой API-ключ
+                    "q": $city.trim()
                 });
             } else {
                 $reactions.say("Пожалуйста, уточните город, например: \"Какая погода в Москве?\"");
@@ -22,13 +24,7 @@ theme: /
 
     state: WeatherResponse
         event!: httpSuccess
-        script:
-            $data = $parse.json($response.body);
-            $location = $data.location.name;
-            $temp = $data.current.temp_c;
-            $condition = $data.current.condition.text;
-            $reactions.say("Сейчас в {{$location}}: {{$temp}}°C, {{$condition}}.");
-        a: 
+        a: Сейчас в {{$parse.json($response.body).location.name}}: {{$parse.json($response.body).current.temp_c}}°C, {{$parse.json($response.body).current.condition.text}}.
 
     state: WeatherError
         event!: httpError
