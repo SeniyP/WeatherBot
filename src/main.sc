@@ -11,11 +11,11 @@ theme: /
         a: Сейчас уточню погоду...
         script:
             // Извлекаем город из запроса
-            $city = $request.query.match(/в\s+(.+)/)?.[1];
-            if ($city) {
+            $city = $request.query.match(/в\s+(.+)/);
+            if ($city && $city[1]) {
                 $http.get("http://api.weatherapi.com/v1/current.json", {
                     "key": "50aa229c887e47dd8c631208240411",
-                    "q": $city.trim()
+                    "q": $city[1].trim()
                 });
             } else {
                 $reactions.say("Пожалуйста, уточните город, например: \"Какая погода в Москве?\"");
