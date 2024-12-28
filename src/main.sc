@@ -58,30 +58,16 @@ theme: /
         intent!: /forecast
         script:
             var city = $caila.inflect($parseTree._geo, ["nomn"]);
-            var date = $parseTree._date;  // Извлекаем дату из запроса пользователя
-            openWeatherMapForecast("metric", "ru", city, date).then(function (res) {
-                if (res && res.list) {
-                    // Ищем прогноз на указанную дату
-                    var forecastData = res.list.find(function (entry) {
-                        var forecastDate = new Date(entry.dt * 1000);
-                        return forecastDate.toDateString() === new Date(date).toDateString();
-                    });
-    
-                    if (forecastData) {
-                        var temperature = Math.round(forecastData.main.temp);
-                        var description = forecastData.weather[0].description;
-    
-                        $reactions.answer("Прогноз погоды в городе " + capitalize(city) + " на " + date + ":");
-                        $reactions.answer("Температура: " + temperature + "°C");
-                        $reactions.answer("Описание погоды: " + description);
-                    } else {
-                        $reactions.answer("Не могу найти прогноз на указанную дату.");
-                    }
+            var targetDate = $caila.inflect($parseTree._date, ["datv"]);
+            
+            getWeatherForSpecificDate("metric", "ru", city, targetDate).then(function (forecast) {
+                if (forecast) {
+                    $reactions.answer("Прогноз на " + forecast.date + " для города " + forecast.city + ": " + forecast.description + ", температура: " + forecast.temperature);
                 } else {
-                    $reactions.answer("Что-то сервер барахлит. Не могу узнать прогноз.");
+                    $reactions.answer("Не удалось получить прогноз на выбранную дату.");
                 }
             }).catch(function (err) {
-                $reactions.answer("Что-то сервер барахлит. Не могу узнать прогноз.");
+                $reactions.answer("Что-то пошло не так. Повторите попытку позже.");
             });
 
     state: CatchAll || noContext=true
