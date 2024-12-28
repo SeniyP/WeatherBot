@@ -8,22 +8,27 @@ theme: /
 
     state: Weather
         intent!: /погода
-        a: Погода в каком городе вас интересует?
+        a: Сейчас уточню погоду...
         script:
-            $city = $request.query.split('в ')[1];
+            // Извлекаем город из запроса
+            $city = $request.query.match(/в\s+(.+)/)?.[1];
             if ($city) {
                 $http.get("http://api.weatherapi.com/v1/current.json", {
                     "key": "50aa229c887e47dd8c631208240411",
-                    "q": $city
+                    "q": $city.trim()
                 });
             } else {
-                $reactions.say("Пожалуйста, уточните город.");
+                $reactions.say("Пожалуйста, уточните город, например: \"Какая погода в Москве?\"");
                 $reactions.go("/NoMatch");
             }
 
     state: WeatherResponse
         event!: httpSuccess
         a: Сейчас в {{$parse.json($response.body).location.name}}: {{$parse.json($response.body).current.temp_c}}°C, {{$parse.json($response.body).current.condition.text}}.
+
+    state: WeatherError
+        event!: httpError
+        a: Не удалось получить данные о погоде. Проверьте название города или попробуйте позже.
 
     state: NoMatch
         event!: noMatch
