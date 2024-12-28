@@ -43,7 +43,7 @@
     "priority" : 0
   }, {
     "path" : "/forecast",
-    "enabled" : true,
+    "enabled" : false,
     "shared" : false,
     "phrases" : [ {
       "text" : "Какая погода будет в @mystem.geo в @duckling.time"
