@@ -16,7 +16,7 @@ theme: /
                     "q": $session.city.trim()
                 });
             } else {
-                $response.say("Пожалуйста, уточните город, например: \"Какая погода в Москве?\"");
+                $reactions.say("Пожалуйста, уточните город, например: \"Какая погода в Москве?\"");
                 $reactions.go("/NoMatch");
             }
 
@@ -27,7 +27,7 @@ theme: /
             $location = $data.location.name;
             $temp = $data.current.temp_c;
             $condition = $data.current.condition.text;
-            $response.say("Сейчас в {{$location}}: {{$temp}}°C, {{$condition}}.");
+            $reactions.say("Сейчас в {{$location}}: {{$temp}}°C, {{$condition}}.");
         a: 
 
     state: WeatherError
