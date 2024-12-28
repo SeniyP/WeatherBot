@@ -17,7 +17,7 @@ theme: /
                 });
             } else {
                 a: "Пожалуйста, уточните город, например: 'Какая погода в Москве?'";
-                $reactions.go("/NoMatch");
+                $state.go("/NoMatch");  // Переход на другое состояние
             }
 
     state: WeatherResponse
