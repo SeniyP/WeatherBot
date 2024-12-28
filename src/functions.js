@@ -12,30 +12,46 @@ function openWeatherMapCurrent(units, lang, q) {
     });
 }
 
-function openWeatherMapForecast(units, lang, q, date) {
-    // Формируем запрос к API
-    var url = "http://api.openweathermap.org/data/2.5/forecast?APPID=" + OPENWEATHERMAP_API_KEY + "&units=" + units + "&lang=" + lang + "&q=" + q;
-    
-    return $http.get(url, {
+function getWeatherForSpecificDate(units, lang, city, targetDate) {
+    return $http.get("http://api.openweathermap.org/data/2.5/forecast?APPID=${APPID}&units=${units}&lang=${lang}&q=${city}", {
         timeout: 10000,
         query: {
             APPID: OPENWEATHERMAP_API_KEY,
             units: units,
             lang: lang,
-            q: q
+            q: city
         }
-    }).then(function(res) {
-        // Проверка наличия данных в ответе
-        if (res && res.data && res.data.list) {
-            $reactions.answer("Получен прогноз: " + JSON.stringify(res.data));  // Выводим данные в ответ
-            return res.data;
+    }).then(function (response) {
+        if (response && response.data && response.data.list) {
+            // Получаем все данные с прогнозом
+            var forecastData = response.data.list;
+
+            // Преобразуем targetDate в объект Date
+            var targetDateObj = new Date(targetDate);
+
+            // Ищем ближайший прогноз, который соответствует дате
+            var selectedForecast = forecastData.find(function (forecast) {
+                var forecastDate = new Date(forecast.dt * 1000); // Время из API в секундах, преобразуем в миллисекунды
+                return forecastDate.toDateString() === targetDateObj.toDateString();
+            });
+
+            if (selectedForecast) {
+                var description = selectedForecast.weather[0].description;
+                var temp = Math.round(selectedForecast.main.temp);
+                return {
+                    city: city,
+                    date: targetDate,
+                    description: description,
+                    temperature: temp + "°C"
+                };
+            } else {
+                throw new Error("Не удалось найти данные для указанной даты.");
+            }
         } else {
-            throw new Error("Нет данных в ответе от API.");
+            throw new Error("Ошибка получения данных о погоде.");
         }
-    }).catch(function(err) {
-        // Логируем подробную ошибку
-        $reactions.answer("Ошибка при запросе прогноза: " + err.message);
-        $reactions.answer("Ответ сервера: " + JSON.stringify(err));  // Дополнительная информация об ошибке
-        throw new Error("Не могу получить прогноз. Проверьте запрос.");
+    }).catch(function (err) {
+        $reactions.answer("Произошла ошибка при запросе данных о погоде: " + err.message);
+        return null;
     });
 }
