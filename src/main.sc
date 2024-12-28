@@ -38,13 +38,15 @@ theme: /
                     var description = res.weather[0].description;
                     var windDirection = res.wind.deg;
     
-                    $reactions.answer("Полная информация о погоде в городе " + capitalize(city) + ":");
-                    $reactions.answer("Температура: " + temperature + "°C");
-                    $reactions.answer("Влажность: " + humidity + "%");
-                    $reactions.answer("Давление: " + pressure + " гПа");
-                    $reactions.answer("Скорость ветра: " + windSpeed + " м/с");
-                    $reactions.answer("Направление ветра: " + windDirection + "°");
-                    $reactions.answer("Описание погоды: " + description);
+                    var fullWeatherInfo = "Полная информация о погоде в городе " + capitalize(city) + ":\n" +
+                        "Температура: " + temperature + "°C\n" +
+                        "Влажность: " + humidity + "%\n" +
+                        "Давление: " + pressure + " гПа\n" +
+                        "Скорость ветра: " + windSpeed + " м/с\n" +
+                        "Направление ветра: " + windDirection + "°\n" +
+                        "Описание погоды: " + description;
+    
+                    $reactions.answer(fullWeatherInfo);
                 } else {
                     $reactions.answer("Что-то сервер барахлит. Не могу узнать полную информацию о погоде.");
                 }
