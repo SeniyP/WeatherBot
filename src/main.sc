@@ -15,6 +15,9 @@ theme: /
             
             # Проверяем, был ли передан город
             if ($session.city) {
+                # Логирование для отладки
+                a: "Вы указали город: {{$session.city}}"
+
                 # Делаем запрос на погоду
                 HttpRequest:
                     url = "http://api.weatherapi.com/v1/current.json?key=50aa229c887e47dd8c631208240411&q=" + $session.city.trim()
@@ -37,7 +40,12 @@ theme: /
             $location = $data.location.name;
             $temp = $data.current.temp_c;
             $condition = $data.current.condition.text;
+
+            # Логирование для отладки
+            a: "Полученные данные: {{$response.body}}"
+            
             a: "Сейчас в {{$location}}: {{$temp}}°C, {{$condition}}."
+        
         inlineButtons:
             {text: "Перейти на сайт погоды", url: "https://www.weatherapi.com"}
 
