@@ -1,41 +1,47 @@
 require: slotfilling/slotFilling.sc
-  module = sys.zb-common
+module = sys.zb-common
 theme: /
 
-    state: Start
-        q!: $regex</start>
-        a: Начнём.
+state: Start
+    q!: $regex</start>
+    a: Здравствуйте! Я могу рассказать вам о текущей погоде.
+    a: Введите или скажите город, для которого хотите узнать погоду.
 
-    state: Hello
-        intent!: /привет
-        a: Привет привет
+state: RequestWeather
+    intent!: /RequestWeather
+    script:
+        #$session.city = $parseTree._City
+        $session.city = $parseTree._City;
+    
+    if: $session.city == ""
+        go!: /NoMatch
+    
+    HttpRequest:
+        url = http://api.weatherapi.com/v1/current.json?key=50aa229c887e47dd8c631208240411&q={{$session.city}}
+        method = GET
+        dataType = json
+        okState = /WeatherResponse
+        errorState = /ErrorRequest
+        timeout = 0
+        headers = []
+        vars = [{"name":"temperature","value":"$httpResponse.current.temp_c"},
+                {"name":"condition","value":"$httpResponse.current.condition.text"},
+                {"name":"city","value":"$session.city"}]
 
-    state: Bye
-        intent!: /пока
-        a: Пока пока
+state: WeatherResponse
+    a: В городе {{$session.city}} сейчас {{$temperature}}°C, погода: {{$condition}}.
+    a: У Вас есть другие вопросы по погоде?
+    state: Yes
+        q: * (Да|да) *
+        go!: /Start
+    state: No
+        q: * (нет|Нет) *
+        go!: /Bye
 
-    state: NoMatch
-        event!: noMatch
-        a: Я не понял. Вы сказали: {{$request.query}}
+state: ErrorRequest
+    a: Подключение не удалось. Увы, я не смог получить данные о погоде.
+    go!: /Bye
 
-    state: Match
-        event!: match
-        a: {{$context.intent.answer}}
-
-    state: Weather
-        intent!: /погода
-        a: Дайте мне секунду, я проверю погоду для вас...
-        event: weather_request
-
-event: weather_request
-    action: get_weather
-
-action: get_weather
-    url: "http://api.weatherapi.com/v1/current.json?key=50aa229c887e47dd8c631208240411&q=Москва"
-    method: GET
-    response: $.current
-    result_mapping:
-        temperature: $.temp_c
-        condition: $.condition.text
-
-    result: Погода на текущий момент: {{$result.temperature}}°C, {{$result.condition}}.
+state: NoMatch
+    event!: noMatch
+    a: Я не понял ваш запрос. Повторите, пожалуйста.

@@ -47,7 +47,7 @@
     "priority" : 0
   }, {
     "path" : "/Погода",
-    "enabled" : true,
+    "enabled" : false,
     "shared" : false,
     "phrases" : [ {
       "text" : "Какая погода в Москве?"
@@ -73,6 +73,26 @@
       "entity" : "city",
       "required" : true,
       "prompts" : [ "Что с погодой в {city}" ]
+    } ],
+    "priority" : 0
+  }, {
+    "path" : "/RequestWeather",
+    "enabled" : true,
+    "shared" : false,
+    "phrases" : [ {
+      "text" : "Какая погода в Москве?"
+    }, {
+      "text" : "Что в погоде в Санкт-Петербурге?"
+    } ],
+    "classificationRules" : {
+      "refs" : [ ]
+    },
+    "patterns" : [ ],
+    "slots" : [ {
+      "name" : "city",
+      "entity" : "city",
+      "required" : true,
+      "prompts" : [ ]
     } ],
     "priority" : 0
   } ],
