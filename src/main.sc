@@ -2,23 +2,6 @@ require: slotfilling/slotFilling.sc
   module = sys.zb-common
 theme: /
 
-intents:
-  - /погода
-    examples:
-      - Какая погода в {city}
-      - Погода в {city}
-      - Что с погодой в {city}
-      - Как там погода в {city}
-
-entities:
-  - city: 
-      examples:
-        - Москва
-        - Санкт-Петербург
-        - Лондон
-        - Париж
-
-states:
     state: Start
         q!: $regex</start>
         a: Привет! Я могу рассказать погоду. Просто спросите, например: "Какая погода в Москве?"
