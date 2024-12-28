@@ -1,35 +1,44 @@
 require: weather-api.js
     type = scriptEs6
-    name = weatherAPI
+    name = weatherApi
 
 theme: /
 
     state: Start
         q!: $regex</start>
-        a: Привет! Я могу рассказать тебе о погоде в любом городе. Просто спроси меня о погоде в каком-либо городе!
+        a: Привет! Я могу рассказать погоду. Просто скажите, например: 'Какая погода в Москве?'
 
-    state: GetWeather
-        event!: intentEvent
-        entities:
-            - city
+    state: WeatherRequest
+        intent!: /Погода
         scriptEs6:
-            const city = $request.data.entities.city;  // Извлекаем город из сущности
-            if (city) {
-                try {
-                    const weatherData = await weatherAPI.getWeather(city);
-                    const { temperature, condition } = weatherData;
-                    $reactions.answer(`Текущая погода в городе ${city}: ${temperature}°C, ${condition}.`);
-                } catch (e) {
-                    $reactions.answer("Извините, я не смог получить данные о погоде. Попробуйте снова позже.");
+            const city = $context.entities.city;
+            if (!city) {
+                $reactions.answer("Пожалуйста, уточните город, например: 'Какая погода в Москве?'");
+                return;
+            }
+
+            try {
+                // Получаем данные о погоде для указанного города
+                const weatherData = await weatherApi.getWeather(city);
+
+                if (!weatherData) {
+                    $reactions.answer("Не удалось получить данные о погоде. Проверьте название города или попробуйте позже.");
+                    return;
                 }
-            } else {
-                $reactions.answer("Пожалуйста, уточните город, например, 'Какая погода в Москве?'");
+
+                const location = weatherData.location.name;
+                const temp = weatherData.current.temp_c;
+                const condition = weatherData.current.condition.text;
+
+                $reactions.answer(`Сейчас в ${location}: ${temp}°C, ${condition}.`);
+            } catch (e) {
+                $reactions.answer("Произошла ошибка при получении данных о погоде. Попробуйте позже.");
             }
 
     state: NoMatch || noContext = true
         event!: noMatch
-        a: Извините, я не понял ваш запрос. Пожалуйста, спросите о погоде в конкретном городе.
+        a: Извините, я не понял. Пожалуйста, уточните запрос, например: 'Какая погода в Москве?'
 
-    state: RejectFile || noContext = true
-        event!: fileTooBigEvent
-        a: Извините, я принимаю только текстовые запросы. Пожалуйста, укажите название города.
+    state: WeatherError || noContext = true
+        event!: httpError
+        a: Не удалось получить данные о погоде. Попробуйте позже!
