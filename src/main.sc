@@ -31,44 +31,52 @@ theme: /
         intent!: /geo-date
         script:
             var city = $caila.inflect($parseTree._geo, ["nomn"]);
-            var date = $caila.inflect($parseTree._date, ["nomn"]);
+            var dateString = $caila.inflect($parseTree._date, ["nomn"]);
     
-            // Проверка валидности даты
-            var requestedDate = new Date(date);
-            if (isNaN(requestedDate.getTime())) {
-                $reactions.answer("Не удалось распознать дату. Пожалуйста, укажите корректную дату.");
-                return;
-            }
+            // Регулярное выражение для распознавания даты в формате "YYYY-MM-DD"
+            var regexDate = /(\d{4})-(\d{2})-(\d{2})/;
+            var match = dateString.match(regexDate);
     
-            // Преобразуем дату в формат YYYY-MM-DD для дальнейшего сравнения
-            requestedDate = requestedDate.toISOString().split('T')[0];
-    
-            // Используем прогноз погоды на 5 дней
-            openWeatherMapForecast("metric", "ru", city).then(function (res) {
-                if (res && res.list) {
-                    var weatherOnDate = res.list.filter(function (forecast) {
-                        var forecastDate = new Date(forecast.dt * 1000).toISOString().split('T')[0];
-                        return forecastDate === requestedDate;
-                    });
-    
-                    if (weatherOnDate.length > 0) {
-                        var forecastMessage = "Погода в городе " + capitalize(city) + " на " + requestedDate + ":\n";
-                        weatherOnDate.forEach(function (forecast) {
-                            var time = new Date(forecast.dt * 1000).toLocaleTimeString();
-                            var temp = Math.round(forecast.main.temp);
-                            var description = forecast.weather[0].description;
-                            forecastMessage += "Время: ${time}, Температура: ${temp}°C, Описание: ${description}\n";
-                        });
-                        $reactions.answer(forecastMessage);
-                    } else {
-                        $reactions.answer("Извините, нет прогноза погоды на эту дату.");
-                    }
-                } else {
-                    $reactions.answer("Что-то сервер барахлит. Не могу узнать погоду на указанную дату.");
+            if (match) {
+                // Если дата распознана, преобразуем её в объект Date
+                var requestedDate = new Date(match[1], match[2] - 1, match[3]);
+                if (isNaN(requestedDate.getTime())) {
+                    $reactions.answer("Не удалось распознать дату. Пожалуйста, укажите корректную дату.");
+                    return;
                 }
-            }).catch(function (err) {
-                $reactions.answer("Что-то сервер барахлит. Не могу узнать погоду на указанную дату.");
-            });
+    
+                // Преобразуем дату в формат YYYY-MM-DD для дальнейшего сравнения
+                requestedDate = requestedDate.toISOString().split('T')[0];
+    
+                // Используем прогноз погоды на 5 дней
+                openWeatherMapForecast("metric", "ru", city).then(function (res) {
+                    if (res && res.list) {
+                        var weatherOnDate = res.list.filter(function (forecast) {
+                            var forecastDate = new Date(forecast.dt * 1000).toISOString().split('T')[0];
+                            return forecastDate === requestedDate;
+                        });
+    
+                        if (weatherOnDate.length > 0) {
+                            var forecastMessage = "Погода в городе " + capitalize(city) + " на " + requestedDate + ":\n";
+                            weatherOnDate.forEach(function (forecast) {
+                                var time = new Date(forecast.dt * 1000).toLocaleTimeString();
+                                var temp = Math.round(forecast.main.temp);
+                                var description = forecast.weather[0].description;
+                                forecastMessage += `Время: ${time}, Температура: ${temp}°C, Описание: ${description}\n`;
+                            });
+                            $reactions.answer(forecastMessage);
+                        } else {
+                            $reactions.answer("Извините, нет прогноза погоды на эту дату.");
+                        }
+                    } else {
+                        $reactions.answer("Что-то сервер барахлит. Не могу узнать погоду на указанную дату.");
+                    }
+                }).catch(function (err) {
+                    $reactions.answer("Что-то сервер барахлит. Не могу узнать погоду на указанную дату.");
+                });
+            } else {
+                $reactions.answer("Не удалось распознать дату. Пожалуйста, укажите корректную дату в формате YYYY-MM-DD.");
+            }
 
 
 
