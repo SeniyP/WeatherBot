@@ -57,7 +57,7 @@ theme: /
     state: GeoDate
         intent!: /geo-date
         script:
-            // Задайте API ключ
+           // Задайте API ключ
             var apiKey = "de907e53b9a4691b221ea39abe59380c";  // Ваш API-ключ
             var city = "Москва";  // Город для запроса
             
@@ -68,6 +68,7 @@ theme: /
             function getWeatherForecast() {
                 // Отправка GET-запроса
                 $http.get(url).then(function(response) {
+                    console.log(response);  // Логируем полный ответ для диагностики
                     if (response.status === 200) {
                         // Проверяем, есть ли данные в ответе
                         if (response.data && response.data.list && response.data.list.length > 0) {
@@ -91,12 +92,16 @@ theme: /
                     }
                 }).catch(function(error) {
                     // Обработка ошибок при запросе
+                    console.log(error);  // Логируем ошибку для диагностики
                     if (error.response) {
                         // Ошибка ответа от сервера
                         $reactions.answer("Ошибка при запросе: " + error.response.statusText);
+                    } else if (error.request) {
+                        // Ошибка при отправке запроса
+                        $reactions.answer("Ошибка при отправке запроса: " + error.message);
                     } else {
-                        // Ошибка в процессе запроса
-                        $reactions.answer("Ошибка: " + error.message);
+                        // Ошибка при обработке запроса
+                        $reactions.answer("Неизвестная ошибка: " + error.message);
                     }
                 });
             }
