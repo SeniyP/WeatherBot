@@ -33,8 +33,15 @@ theme: /
             var city = $caila.inflect($parseTree._geo, ["nomn"]);
             var date = $caila.inflect($parseTree._date, ["nomn"]);
     
+            // Проверка валидности даты
+            var requestedDate = new Date(date);
+            if (isNaN(requestedDate.getTime())) {
+                $reactions.answer("Не удалось распознать дату. Пожалуйста, укажите корректную дату.");
+                return;
+            }
+    
             // Преобразуем дату в формат YYYY-MM-DD для дальнейшего сравнения
-            var requestedDate = new Date(date).toISOString().split('T')[0];
+            requestedDate = requestedDate.toISOString().split('T')[0];
     
             // Используем прогноз погоды на 5 дней
             openWeatherMapForecast("metric", "ru", city).then(function (res) {
@@ -62,6 +69,7 @@ theme: /
             }).catch(function (err) {
                 $reactions.answer("Что-то сервер барахлит. Не могу узнать погоду на указанную дату.");
             });
+
 
 
     state: fullgeo
