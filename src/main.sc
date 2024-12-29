@@ -60,36 +60,36 @@ theme: /
         a: Могу я помочь чем то еще?
 
     state: GetWeatherWithDate
-    intent!: /date
-    script:
-        var city = $caila.inflect($parseTree._geo, ["nomn"]);
-        var date = $parseTree._date;  // Извлекаем дату
-        var formattedDate = new Date(date.timestamp).toISOString().split('T')[0];  // Преобразуем дату в формат YYYY-MM-DD
-
-        openWeatherMapForecast("metric", "ru", city).then(function (res) {
-            if (res && res.list) {
-                // Фильтруем прогнозы на указанную дату
-                var forecasts = res.list.filter(function (item) {
-                    return item.dt_txt.startsWith(formattedDate);
-                });
-
-                if (forecasts.length > 0) {
-                    var weatherInfo = "Прогноз погоды в городе " + capitalize(city) + " на " + formattedDate + ":\n";
-                    forecasts.forEach(function (forecast) {
-                        var time = forecast.dt_txt.split(" ")[1].slice(0, 5); // Извлекаем время
-                        weatherInfo += time + " — " + forecast.weather[0].description + ", " + Math.round(forecast.main.temp) + "°C\n";
+        intent!: /date
+        script:
+            var city = $caila.inflect($parseTree._geo, ["nomn"]);
+            var date = $parseTree._date;  // Извлекаем дату
+            var formattedDate = new Date(date.timestamp).toISOString().split('T')[0];  // Преобразуем дату в формат YYYY-MM-DD
+    
+            openWeatherMapForecast("metric", "ru", city).then(function (res) {
+                if (res && res.list) {
+                    // Фильтруем прогнозы на указанную дату
+                    var forecasts = res.list.filter(function (item) {
+                        return item.dt_txt.startsWith(formattedDate);
                     });
-                    $reactions.answer(weatherInfo);
+    
+                    if (forecasts.length > 0) {
+                        var weatherInfo = "Прогноз погоды в городе " + capitalize(city) + " на " + formattedDate + ":\n";
+                        forecasts.forEach(function (forecast) {
+                            var time = forecast.dt_txt.split(" ")[1].slice(0, 5); // Извлекаем время
+                            weatherInfo += time + " — " + forecast.weather[0].description + ", " + Math.round(forecast.main.temp) + "°C\n";
+                        });
+                        $reactions.answer(weatherInfo);
+                    } else {
+                        $reactions.answer("Нет данных о погоде на указанную дату.");
+                    }
                 } else {
-                    $reactions.answer("Нет данных о погоде на указанную дату.");
+                    $reactions.answer("Что-то сервер барахлит. Не могу узнать прогноз.");
                 }
-            } else {
+            }).catch(function (err) {
                 $reactions.answer("Что-то сервер барахлит. Не могу узнать прогноз.");
-            }
-        }).catch(function (err) {
-            $reactions.answer("Что-то сервер барахлит. Не могу узнать прогноз.");
-        });
-    a: Могу я помочь чем-то еще?
+            });
+        a: Могу я помочь чем-то еще?
     
     state: CatchAll || noContext=true
         event!: noMatch
