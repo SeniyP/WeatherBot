@@ -58,6 +58,16 @@ theme: /
                 $reactions.answer("Что-то сервер барахлит. Не могу узнать полную информацию о погоде.");
             });
         a: Могу я помочь чем то еще?
+
+    state: GetWeatherWithDate
+        intent!: /date
+        script:
+            var city = $caila.inflect($parseTree._geo, ["nomn"]);
+            var date = $parseTree._date;  // Извлекаем дату
+            // Формируем строку для вывода, например "Поиск информации Иркутск, 2024-12-29"
+            var formattedDate = new Date(date.timestamp).toISOString().split('T')[0];  // Преобразуем дату в формат YYYY-MM-DD
+            $reactions.answer("Поиск информации " + capitalize(city) + ", " + formattedDate);
+        a: Могу я помочь чем-то еще?
     
     state: CatchAll || noContext=true
         event!: noMatch

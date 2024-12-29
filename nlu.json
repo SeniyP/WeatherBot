@@ -45,7 +45,7 @@
     } ],
     "priority" : 0
   }, {
-    "path" : "/geo-date",
+    "path" : "/date",
     "enabled" : true,
     "shared" : false,
     "phrases" : [ {
