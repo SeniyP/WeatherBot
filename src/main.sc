@@ -57,26 +57,11 @@ theme: /
     state: GeoDate
         intent!: /geo-date
         script:
-            var city = $caila.inflect($parseTree._geo, ["nomn"]);
-            var dateInput = $parseTree._date;
-    
-            // Проверка, что дата распознана через Duckling и преобразование в правильный формат
-            var formattedDate;
-            if (dateInput) {
-                formattedDate = dateInput.value.split('T')[0];  // Извлекаем только дату из строки 'YYYY-MM-DD'
-                $reactions.answer("Получена дата: " + formattedDate); // Выводим информацию о дате пользователю
-            } else {
-                $reactions.answer("Не удалось определить дату.");
-                return;
-            }
-    
-            // Запрос на 5-дневный прогноз
-            // Задайте API ключ
             var apiKey = "de907e53b9a4691b221ea39abe59380c";  // Ваш API-ключ
             var city = "Москва";  // Город для запроса
             
             // Формируем URL для запроса
-            var url = "http://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&units=metric&lang=ru";
+            var url = "http://api.openweathermap.org/data/2.5/forecast?q=" + city + "&appid=" + apiKey + "&units=metric&lang=ru";
             
             // Функция для отправки запроса
             function getWeatherForecast() {
@@ -93,10 +78,10 @@ theme: /
                         var description = weatherInfo.weather[0].description;
                         
                         // Выводим информацию о погоде
-                        console.log("Погода на ${date}: ${temperature}°C, ${description}");
+                        console.log("Погода на " + date + ": " + temperature + "°C, " + description);
             
                         // Отправляем информацию пользователю
-                        $reactions.answer("Погода в ${city} на ${date}: ${temperature}°C, ${description}");
+                        $reactions.answer("Погода в " + city + " на " + date + ": " + temperature + "°C, " + description);
                     } else {
                         // Обработка ошибки, если данные не получены
                         console.error("Не удалось получить данные о погоде.");
@@ -108,6 +93,9 @@ theme: /
                     $reactions.answer("Ошибка при запросе к OpenWeatherMap. Ошибка: " + error.message);
                 });
             }
+            
+            // Вызов функции для получения прогноза
+            getWeatherForecast();
 
 
 
