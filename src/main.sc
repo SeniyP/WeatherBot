@@ -5,6 +5,9 @@ theme: /
     state: Start
         q!: $regex</start>
         a: Привет! Я электронный помощник. Я могу сообщить вам текущую погоду в любом городе. Напишите город.
+        
+    state: CloseTask
+        a: Могу я помочь чем то еще?
     
     state: GetWeather
         intent!: /geo
@@ -24,6 +27,7 @@ theme: /
             }).catch(function (err) {
                 $reactions.answer("Что-то сервер барахлит. Не могу узнать погоду.");
             });
+            go: /CloseTask
     
     state: fullgeo
         intent!: /fullgeo
@@ -53,6 +57,7 @@ theme: /
             }).catch(function (err) {
                 $reactions.answer("Что-то сервер барахлит. Не могу узнать полную информацию о погоде.");
             });
+            go: /CloseTask
     
     state: CatchAll || noContext=true
         event!: noMatch

@@ -40,7 +40,8 @@
       "name" : "geo",
       "entity" : "mystem.geo",
       "required" : true,
-      "prompts" : [ "В каком городе вы хотели бы узнать прогноз погоды?" ]
+      "prompts" : [ "В каком городе вы хотели бы узнать прогноз погоды?" ],
+      "array" : false
     } ],
     "priority" : 0
   }, {
@@ -58,12 +59,14 @@
       "name" : "geo",
       "entity" : "mystem.geo",
       "required" : true,
-      "prompts" : [ "В каком городе вы хотели бы узнать прогноз погоды?" ]
+      "prompts" : [ "В каком городе вы хотели бы узнать прогноз погоды?" ],
+      "array" : false
     }, {
       "name" : "date",
       "entity" : "duckling.date",
       "required" : true,
-      "prompts" : [ "На какую дату вы бы хотели узнать погоду?" ]
+      "prompts" : [ "На какую дату вы бы хотели узнать погоду?" ],
+      "array" : false
     } ],
     "priority" : 0
   }, {
@@ -107,7 +110,8 @@
       "name" : "geo",
       "entity" : "mystem.geo",
       "required" : true,
-      "prompts" : [ ]
+      "prompts" : [ ],
+      "array" : false
     } ],
     "priority" : 0
   } ],
@@ -154,7 +158,7 @@
     },
     "records" : [ ]
   } ],
-  "enabledSystemEntities" : [ "mystem.geo", "pymorphy.geox", "duckling.number", "duckling.time", "duckling.time-of-day", "duckling.duration", "duckling.phone-number", "duckling.email", "duckling.url", "duckling.date" ],
+  "enabledSystemEntities" : [ "mystem.geo", "pymorphy.geox", "duckling.number", "duckling.time", "duckling.date", "duckling.time-of-day", "duckling.duration", "duckling.phone-number", "duckling.email", "duckling.url" ],
   "spellerDictionary" : [ ],
   "systemEntities" : [ {
     "name" : "mystem.geo",
@@ -222,6 +226,10 @@
     "version" : "v2",
     "enabled" : true
   }, {
+    "name" : "duckling.date",
+    "version" : "v2",
+    "enabled" : true
+  }, {
     "name" : "duckling.time-of-day",
     "version" : "v2",
     "enabled" : true
@@ -254,10 +262,6 @@
   }, {
     "name" : "zb.number",
     "enabled" : false
-  }, {
-    "name" : "duckling.date",
-    "version" : "v2",
-    "enabled" : true
   } ],
   "faq" : [ ],
   "skills" : [ ]
