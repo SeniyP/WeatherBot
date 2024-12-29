@@ -30,11 +30,13 @@ theme: /
         script:
             var city = $caila.inflect($parseTree._geo, ["nomn"]);
             var dateEntity = $parseTree._duckling_date;
+            
             if (!dateEntity || !dateEntity.value) {
                 $reactions.answer("Пожалуйста, укажите дату.");
                 return;
             }
 
+            // Преобразуем дату в формат, используемый для запросов
             var date = new Date(dateEntity.value);
             if (isNaN(date)) {
                 $reactions.answer("Не удалось распознать дату. Пожалуйста, укажите дату в правильном формате.");
