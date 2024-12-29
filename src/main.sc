@@ -91,11 +91,12 @@ theme: /
                         $reactions.answer("Данных о погоде в городе " + capitalize(city) + " на дату " + formattedDate + " нет.");
                     }
                 } else {
-                    $reactions.answer("Что-то сервер барахлит. Не могу узнать прогноз погоды.");
+                    $reactions.answer("Ответ от OpenWeatherMap пустой или ошибка. Ответ: " + JSON.stringify(res));
                 }
             }).catch(function (err) {
-                $reactions.answer("Что-то сервер барахлит. Не могу узнать прогноз погоды."); // Выводим ошибку пользователю
+                $reactions.answer("Ошибка при запросе к OpenWeatherMap. Ошибка: " + JSON.stringify(err)); // Выводим ошибку
             });
+
 
 
 
