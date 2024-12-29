@@ -24,7 +24,7 @@ theme: /
             }).catch(function (err) {
                 $reactions.answer("Что-то сервер барахлит. Не могу узнать погоду.");
             });
-
+    
     state: fullgeo
         intent!: /fullgeo
         script:
@@ -37,7 +37,7 @@ theme: /
                     var windSpeed = res.wind.speed;
                     var description = res.weather[0].description;
                     var windDirection = res.wind.deg;
-
+    
                     var fullWeatherInfo = "Полная информация о погоде в городе " + capitalize(city) + ":\n" +
                         "Температура: " + temperature + "°C\n" +
                         "Влажность: " + humidity + "%\n" +
@@ -45,7 +45,7 @@ theme: /
                         "Скорость ветра: " + windSpeed + " м/с\n" +
                         "Направление ветра: " + windDirection + "°\n" +
                         "Описание погоды: " + description;
-
+    
                     $reactions.answer(fullWeatherInfo);
                 } else {
                     $reactions.answer("Что-то сервер барахлит. Не могу узнать полную информацию о погоде.");
@@ -53,74 +53,7 @@ theme: /
             }).catch(function (err) {
                 $reactions.answer("Что-то сервер барахлит. Не могу узнать полную информацию о погоде.");
             });
-
-    state: GeoDate
-        intent!: /geo-date
-        script:
-           /// Задайте API ключ
-            var apiKey = "de907e53b9a4691b221ea39abe59380c";  // Ваш API-ключ
-            var city = "Москва";  // Город для запроса
-            
-            // Формируем URL для запроса
-            var url = "http://api.openweathermap.org/data/2.5/forecast?q=" + city + "&appid=" + apiKey + "&units=metric&lang=ru";
-            
-            // Функция для отправки запроса
-            function getWeatherForecast() {
-                // Отправка GET-запроса
-                $http.get(url).then(function(response) {
-                    // Преобразуем объект в строку и ограничиваем её до первых 1000 символов
-                    var responseText = JSON.stringify(response).substring(0, 5000);
-            
-                    // Логируем ответ в формате, доступном в вашей среде
-                    $reactions.answer("Ответ от сервера: " + responseText);
-            
-                    if (response.status === 200) {
-                        // Проверяем, есть ли данные в ответе
-                        if (response.data && response.data.list && response.data.list.length > 0) {
-                            var forecastData = response.data.list;
-                            var weatherInfo = forecastData[0];  // Берем данные о первой погоде (по времени)
-            
-                            // Извлекаем информацию из ответа
-                            var date = weatherInfo.dt_txt;
-                            var temperature = weatherInfo.main.temp;
-                            var description = weatherInfo.weather[0].description;
-            
-                            // Отправляем информацию пользователю
-                            $reactions.answer("Погода в " + city + " на " + date + ": " + temperature + "°C, " + description);
-                        } else {
-                            // Обработка ошибки, если данных нет
-                            $reactions.answer("Не удалось получить прогноз погоды для города " + city + ". Попробуйте позже.");
-                        }
-                    } else {
-                        // Обработка ошибки, если код ответа не 200
-                        $reactions.answer("Ошибка при запросе: " + response.statusText);
-                    }
-                }).catch(function(error) {
-                    // Обработка ошибок при запросе
-                    if (error.response) {
-                        // Ошибка ответа от сервера
-                        $reactions.answer("Ошибка при запросе: " + error.response.statusText);
-                    } else if (error.request) {
-                        // Ошибка при отправке запроса
-                        $reactions.answer("Ошибка при отправке запроса: " + error.message);
-                    } else {
-                        // Ошибка при обработке запроса
-                        $reactions.answer("Неизвестная ошибка: " + error.message);
-                    }
-                });
-            }
-            
-            // Вызов функции для получения прогноза
-            getWeatherForecast();
-
-
-
-
-
-
-
-
-
+    
     state: CatchAll || noContext=true
         event!: noMatch
         a: Извините, я вас не понимаю, зато могу рассказать о погоде. Введите название города
