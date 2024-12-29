@@ -32,21 +32,25 @@ theme: /
         script:
             var city = $caila.inflect($parseTree._geo, ["nomn"]);
             var date = $caila.inflect($parseTree._date, ["nomn"]);
-        
-            openWeatherMapForecast("metric", "ru", city, date).then(function (res) {
+    
+            // Преобразуем дату в формат YYYY-MM-DD для дальнейшего сравнения
+            var requestedDate = new Date(date).toISOString().split('T')[0];
+    
+            // Используем прогноз погоды на 5 дней
+            openWeatherMapForecast("metric", "ru", city).then(function (res) {
                 if (res && res.list) {
                     var weatherOnDate = res.list.filter(function (forecast) {
                         var forecastDate = new Date(forecast.dt * 1000).toISOString().split('T')[0];
-                        return forecastDate === date;
+                        return forecastDate === requestedDate;
                     });
-                    
+    
                     if (weatherOnDate.length > 0) {
-                        var forecastMessage = "Погода в городе " + capitalize(city) + " на " + date + ":\n";
+                        var forecastMessage = "Погода в городе " + capitalize(city) + " на " + requestedDate + ":\n";
                         weatherOnDate.forEach(function (forecast) {
                             var time = new Date(forecast.dt * 1000).toLocaleTimeString();
                             var temp = Math.round(forecast.main.temp);
                             var description = forecast.weather[0].description;
-                            forecastMessage += "Время: ${time}, Температура: ${temp}°C, Описание: ${description}\n";
+                            forecastMessage += `Время: ${time}, Температура: ${temp}°C, Описание: ${description}\n`;
                         });
                         $reactions.answer(forecastMessage);
                     } else {
@@ -58,6 +62,7 @@ theme: /
             }).catch(function (err) {
                 $reactions.answer("Что-то сервер барахлит. Не могу узнать погоду на указанную дату.");
             });
+
 
     state: fullgeo
         intent!: /fullgeo
