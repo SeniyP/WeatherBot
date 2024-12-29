@@ -57,7 +57,7 @@ theme: /
     state: GeoDate
         intent!: /geo-date
         script:
-           // Задайте API ключ
+           /// Задайте API ключ
             var apiKey = "de907e53b9a4691b221ea39abe59380c";  // Ваш API-ключ
             var city = "Москва";  // Город для запроса
             
@@ -68,10 +68,16 @@ theme: /
             function getWeatherForecast() {
                 // Отправка GET-запроса
                 $http.get(url).then(function(response) {
+                    // Преобразуем объект в строку и ограничиваем её до первых 1000 символов
+                    var responseText = JSON.stringify(response).substring(0, 1000);
+            
+                    // Логируем ответ в формате, доступном в вашей среде
+                    $reactions.answer("Ответ от сервера: " + responseText);
+            
                     if (response.status === 200) {
                         // Проверяем, есть ли данные в ответе
                         if (response.data && response.data.list && response.data.list.length > 0) {
-                            var forecastData = response.data.list.slice(0, 1);  // Берем только первый прогноз
+                            var forecastData = response.data.list;
                             var weatherInfo = forecastData[0];  // Берем данные о первой погоде (по времени)
             
                             // Извлекаем информацию из ответа
@@ -79,9 +85,8 @@ theme: /
                             var temperature = weatherInfo.main.temp;
                             var description = weatherInfo.weather[0].description;
             
-                            // Отправляем сокращенную информацию пользователю
-                            var message = "Погода в " + city + " на " + date + ": " + temperature + "°C, " + description;
-                            $reactions.answer(message);
+                            // Отправляем информацию пользователю
+                            $reactions.answer("Погода в " + city + " на " + date + ": " + temperature + "°C, " + description);
                         } else {
                             // Обработка ошибки, если данных нет
                             $reactions.answer("Не удалось получить прогноз погоды для города " + city + ". Попробуйте позже.");
@@ -107,6 +112,7 @@ theme: /
             
             // Вызов функции для получения прогноза
             getWeatherForecast();
+
 
 
 
