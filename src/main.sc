@@ -59,11 +59,18 @@ theme: /
         script:
             var city = $caila.inflect($parseTree._geo, ["nomn"]);
             var dateInput = $parseTree._date;
-            
+
             // Проверяем тип данных и если это не строка, преобразуем в объект Date
             var formattedDate;
             if (typeof dateInput === 'string') {
-                formattedDate = dateInput.split('T')[0];  // Если строка, разбиваем по 'T' и берем только дату
+                // Разбиваем строку по разделителю и проверяем правильность формата
+                var dateParts = dateInput.split('-');
+                if (dateParts.length === 3) {
+                    formattedDate = dateParts[0] + '-' + dateParts[1] + '-' + dateParts[2];  // Форматируем как 'YYYY-MM-DD'
+                } else {
+                    $reactions.answer("Не удалось определить дату.");
+                    return;
+                }
             } else if (dateInput instanceof Date) {
                 formattedDate = dateInput.toISOString().split('T')[0];  // Если объект Date, преобразуем в строку и берем дату
             } else {
@@ -95,6 +102,7 @@ theme: /
             }).catch(function (err) {
                 $reactions.answer("Что-то сервер барахлит. Не могу узнать прогноз погоды.");
             });
+
 
 
     state: CatchAll || noContext=true
