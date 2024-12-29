@@ -68,7 +68,9 @@ theme: /
             function getWeatherForecast() {
                 // Отправка GET-запроса
                 $http.get(url).then(function(response) {
-                    console.log(response);  // Логируем полный ответ для диагностики
+                    // Логируем ответ в формате, доступном в вашей среде
+                    $reactions.answer("Ответ от сервера: " + JSON.stringify(response));
+            
                     if (response.status === 200) {
                         // Проверяем, есть ли данные в ответе
                         if (response.data && response.data.list && response.data.list.length > 0) {
@@ -92,7 +94,6 @@ theme: /
                     }
                 }).catch(function(error) {
                     // Обработка ошибок при запросе
-                    console.log(error);  // Логируем ошибку для диагностики
                     if (error.response) {
                         // Ошибка ответа от сервера
                         $reactions.answer("Ошибка при запросе: " + error.response.statusText);
@@ -108,6 +109,7 @@ theme: /
             
             // Вызов функции для получения прогноза
             getWeatherForecast();
+
 
 
 
