@@ -59,7 +59,9 @@ theme: /
         script:
             var city = $caila.inflect($parseTree._geo, ["nomn"]);
             var dateInput = $parseTree._date;
-            var formattedDate = dateInput.split('T')[0]; // Извлечение даты в формате YYYY-MM-DD
+            
+            // Преобразуем dateInput в строку, если это не строка
+            var formattedDate = (typeof dateInput === 'string') ? dateInput.split('T')[0] : dateInput.toISOString().split('T')[0];
 
             openWeatherMapForecast("metric", "ru", city).then(function (res) {
                 if (res && res.list) {
@@ -85,6 +87,7 @@ theme: /
             }).catch(function (err) {
                 $reactions.answer("Что-то сервер барахлит. Не могу узнать прогноз погоды.");
             });
+
 
     state: CatchAll || noContext=true
         event!: noMatch
