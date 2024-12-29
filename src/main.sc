@@ -60,19 +60,10 @@ theme: /
             var city = $caila.inflect($parseTree._geo, ["nomn"]);
             var dateInput = $parseTree._date;
 
-            // Проверяем тип данных и если это не строка, преобразуем в объект Date
+            // Проверка, что дата распознана через Duckling и преобразование в правильный формат
             var formattedDate;
-            if (typeof dateInput === 'string') {
-                // Разбиваем строку по разделителю и проверяем правильность формата
-                var dateParts = dateInput.split('-');
-                if (dateParts.length === 3) {
-                    formattedDate = dateParts[0] + '-' + dateParts[1] + '-' + dateParts[2];  // Форматируем как 'YYYY-MM-DD'
-                } else {
-                    $reactions.answer("Не удалось определить дату.");
-                    return;
-                }
-            } else if (dateInput instanceof Date) {
-                formattedDate = dateInput.toISOString().split('T')[0];  // Если объект Date, преобразуем в строку и берем дату
+            if (dateInput) {
+                formattedDate = dateInput.value.split('T')[0];  // Извлекаем только дату из строки 'YYYY-MM-DD'
             } else {
                 $reactions.answer("Не удалось определить дату.");
                 return;
