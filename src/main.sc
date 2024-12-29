@@ -64,7 +64,7 @@ theme: /
             var formattedDate;
             if (dateInput) {
                 formattedDate = dateInput.value.split('T')[0];  // Извлекаем только дату из строки 'YYYY-MM-DD'
-                console.log("Получена дата: " + formattedDate); // Логирование даты
+                $reactions.answer("Получена дата: " + formattedDate); // Выводим информацию о дате пользователю
             } else {
                 $reactions.answer("Не удалось определить дату.");
                 return;
@@ -72,7 +72,6 @@ theme: /
     
             // Запрос на 5-дневный прогноз
             openWeatherMapForecast("metric", "ru", city).then(function (res) {
-                console.log("Ответ от OpenWeatherMap: ", res);  // Логирование ответа API
                 if (res && res.list) {
                     var forecast = null;
                     for (var i = 0; i < res.list.length; i++) {
@@ -95,8 +94,7 @@ theme: /
                     $reactions.answer("Что-то сервер барахлит. Не могу узнать прогноз погоды.");
                 }
             }).catch(function (err) {
-                console.error("Ошибка при запросе к OpenWeatherMap: ", err);  // Логирование ошибки
-                $reactions.answer("Что-то сервер барахлит. Не могу узнать прогноз погоды.");
+                $reactions.answer("Что-то сервер барахлит. Не могу узнать прогноз погоды."); // Выводим ошибку пользователю
             });
 
 
