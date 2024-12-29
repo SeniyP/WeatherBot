@@ -63,7 +63,13 @@ theme: /
 
             openWeatherMapForecast("metric", "ru", city).then(function (res) {
                 if (res && res.list) {
-                    var forecast = res.list.find(item => item.dt_txt.startsWith(formattedDate));
+                    var forecast = null;
+                    for (var i = 0; i < res.list.length; i++) {
+                        if (res.list[i].dt_txt.startsWith(formattedDate)) {
+                            forecast = res.list[i];
+                            break;
+                        }
+                    }
                     if (forecast) {
                         var temperature = Math.round(forecast.main.temp);
                         var description = forecast.weather[0].description;
