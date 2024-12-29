@@ -1,25 +1,4 @@
-# Название проекта
-name: weather-api
-# Точка входа
-entryPoint:
-  - main.sc
-
-# Параметры NLU:
-botEngine: v2
-language: ru
-
-nlp:
-    intentNoMatchThresholds:
-        phrases: 0.2
-        patterns: 0.2
-
-injector:
-    api_key: 'de907e53b9a4691b221ea39abe59380c'
-    slotfilling:
-        maxSlotRetries: 2
-        stopOnAnyIntent: false
-        stopOnAnyIntentThreshold: 0.2
-
+require: functions.js
 # Основной поток
 theme: /
 
@@ -115,7 +94,7 @@ theme: /
                                 var time = new Date(forecast.dt * 1000).toLocaleTimeString();
                                 var temp = Math.round(forecast.main.temp);
                                 var description = forecast.weather[0].description;
-                                forecastMessage += "Время: ${time}, Температура: ${temp}°C, Описание: ${description}\n";
+                                forecastMessage += `Время: ${time}, Температура: ${temp}°C, Описание: ${description}\n`;
                             });
                             $reactions.answer(forecastMessage);
                         } else {
