@@ -59,14 +59,36 @@ theme: /
             });
         a: Могу я помочь чем то еще?
 
-    state: GetWeatherWithDate
+    state: ForecastWeather
         intent!: /date
         script:
             var city = $caila.inflect($parseTree._geo, ["nomn"]);
-            var date = $parseTree._date;  // Извлекаем дату
-            // Формируем строку для вывода, например "Поиск информации Иркутск, 2024-12-29"
-            var formattedDate = new Date(date.timestamp).toISOString().split('T')[0];  // Преобразуем дату в формат YYYY-MM-DD
-            $reactions.answer("Поиск информации " + capitalize(city) + ", " + formattedDate);
+            var date = $parseTree._date.value;
+    
+            openWeatherMapForecast("metric", "ru", city).then(function (res) {
+                if (res && res.list) {
+                    // Преобразование даты в UNIX timestamp
+                    var targetTimestamp = new Date(date).getTime() / 1000;
+    
+                    // Поиск ближайшей записи
+                    var forecast = res.list.find(function (entry) {
+                        return Math.abs(entry.dt - targetTimestamp) < 43200; // Разница меньше 12 часов
+                    });
+    
+                    if (forecast) {
+                        var temperature = Math.round(forecast.main.temp);
+                        var description = forecast.weather[0].description;
+    
+                        $reactions.answer("Поиск информации " + capitalize(city) + ", " + date + ": " + description + ", " + temperature + "°C");
+                    } else {
+                        $reactions.answer("К сожалению, я не нашел прогноз для города " + capitalize(city) + " на " + date + ".");
+                    }
+                } else {
+                    $reactions.answer("Что-то сервер барахлит. Не могу узнать прогноз погоды.");
+                }
+            }).catch(function (err) {
+                $reactions.answer("Что-то сервер барахлит. Не могу узнать прогноз погоды.");
+            });
         a: Могу я помочь чем-то еще?
     
     state: CatchAll || noContext=true
