@@ -78,25 +78,21 @@ theme: /
                         var temperature = weatherInfo.main.temp;
                         var description = weatherInfo.weather[0].description;
                         
-                        // Выводим информацию о погоде
-                        console.log("Погода на " + date + ": " + temperature + "°C, " + description);
-            
                         // Отправляем информацию пользователю
                         $reactions.answer("Погода в " + city + " на " + date + ": " + temperature + "°C, " + description);
                     } else {
                         // Обработка ошибки, если данные не получены
-                        console.error("Не удалось получить данные о погоде.");
                         $reactions.answer("Не удалось получить прогноз погоды. Попробуйте позже.");
                     }
                 }).catch(function(error) {
                     // Обработка ошибок при запросе
-                    console.error("Ошибка при запросе к OpenWeatherMap:", error);
                     $reactions.answer("Ошибка при запросе к OpenWeatherMap. Ошибка: " + error.message);
                 });
             }
             
             // Вызов функции для получения прогноза
             getWeatherForecast();
+
 
 
 
