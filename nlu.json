@@ -29,6 +29,8 @@
     "shared" : false,
     "phrases" : [ {
       "text" : "@mystem.geo"
+    }, {
+      "text" : "Какая погода сейчас в @mystem.geo"
     } ],
     "classificationRules" : {
       "refs" : [ ]
@@ -42,12 +44,10 @@
     } ],
     "priority" : 0
   }, {
-    "path" : "/forecast",
-    "enabled" : false,
+    "path" : "/geo-date",
+    "enabled" : true,
     "shared" : false,
     "phrases" : [ {
-      "text" : "Какая погода будет в @mystem.geo в @duckling.time"
-    }, {
       "text" : "Какая погода будет в @mystem.geo @duckling.date"
     } ],
     "classificationRules" : {
@@ -55,25 +55,15 @@
     },
     "patterns" : [ ],
     "slots" : [ {
-      "name" : "time",
-      "entity" : "duckling.time",
+      "name" : "geo",
+      "entity" : "mystem.geo",
       "required" : true,
-      "prompts" : [ "Укажите желаемое время" ]
+      "prompts" : [ "В каком городе вы хотели бы узнать прогноз погоды?" ]
     }, {
       "name" : "date",
       "entity" : "duckling.date",
       "required" : true,
-      "prompts" : [ "Укажите желаемую дату" ]
-    }, {
-      "name" : "time of day",
-      "entity" : "duckling.time-of-day",
-      "required" : true,
-      "prompts" : [ "Укажите время этого дня" ]
-    }, {
-      "name" : "geo",
-      "entity" : "mystem.geo",
-      "required" : true,
-      "prompts" : [ "Укажите город" ]
+      "prompts" : [ "На какую дату вы бы хотели узнать погоду?" ]
     } ],
     "priority" : 0
   }, {

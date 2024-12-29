@@ -9,9 +9,22 @@ botEngine: v2
 language: ru
 
 nlp:
-    intentNoMatchThresholds:
-        phrases: 0.2
-        patterns: 0.2
+    intents:
+        geo:
+            slots:
+                _geo: @mystem.geo
+            examples:
+                - Какая погода в @mystem.geo
+                - Погода в @mystem.geo
+                - Как там в @mystem.geo
+        geo-date:
+            slots:
+                _geo: @mystem.geo
+                _date: @duckling.date
+            examples:
+                - Какая погода будет в @mystem.geo @duckling.date
+                - Прогноз погоды в @mystem.geo на @duckling.date
+                - Погода в @mystem.geo @duckling.date
 
 injector:
     api_key: 'de907e53b9a4691b221ea39abe59380c'
