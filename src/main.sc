@@ -24,7 +24,7 @@ theme: /
             }).catch(function (err) {
                 $reactions.answer("Что-то сервер барахлит. Не могу узнать погоду.");
             });
-    
+
     state: GetWeatherByDate
         intent!: /geo-date
         script:
@@ -34,18 +34,21 @@ theme: /
             // Выводим дату в формате "YYYY-MM-DD"
             var formattedDate = date.year + '-' + date.month + '-' + date.day;
             
-            // Запрос погоды на эту дату
-            openWeatherMapForecast("metric", "ru", city, formattedDate).then(function (res) {
+            // Запрос погоды на несколько дней (погода доступна не на все даты)
+            openWeatherMapForecast("metric", "ru", city).then(function (res) {
                 if (res && res.list) {
-                    var forecast = res.list.find(function(item) {
+                    // Найдем ближайшую дату в прогнозе, если указанная дата слишком далека
+                    var closestForecast = res.list.find(function(item) {
                         return item.dt_txt.startsWith(formattedDate);
                     });
 
-                    if (forecast) {
+                    if (closestForecast) {
                         $reactions.answer("Прогноз на " + formattedDate + " в городе " + capitalize(city) + ": " +
-                            forecast.weather[0].description + ", " + Math.round(forecast.main.temp) + "°C");
+                            closestForecast.weather[0].description + ", " + Math.round(closestForecast.main.temp) + "°C");
                     } else {
-                        $reactions.answer("Не могу найти прогноз на эту дату.");
+                        $reactions.answer("На эту дату прогноз недоступен, но вот ближайший прогноз.");
+                        var nearestForecast = res.list[0]; // ближайший доступный прогноз
+                        $reactions.answer("Прогноз на ближайший день: " + nearestForecast.weather[0].description + ", " + Math.round(nearestForecast.main.temp) + "°C");
                     }
                 } else {
                     $reactions.answer("Что-то сервер барахлит. Не могу узнать прогноз на эту дату.");
@@ -53,7 +56,7 @@ theme: /
             }).catch(function (err) {
                 $reactions.answer("Что-то сервер барахлит. Не могу узнать прогноз на эту дату.");
             });
-    
+
     state: fullgeo
         intent!: /fullgeo
         script:
@@ -82,7 +85,7 @@ theme: /
             }).catch(function (err) {
                 $reactions.answer("Что-то сервер барахлит. Не могу узнать полную информацию о погоде.");
             });
-    
+
     state: CatchAll || noContext=true
         event!: noMatch
         a: Извините, я вас не понимаю, зато могу рассказать о погоде. Введите название города
