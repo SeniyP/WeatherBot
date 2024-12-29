@@ -57,12 +57,12 @@ theme: /
     state: GeoDate
         intent!: /geo-date
         script:
-                       // Задайте API ключ
+             // Задайте API ключ
             var apiKey = "de907e53b9a4691b221ea39abe59380c";  // Ваш API-ключ
             var city = "Москва";  // Город для запроса
             
             // Формируем URL для запроса
-            var url = "http://api.openweathermap.org/data/2.5/forecast?q=" + city + "&appid=" + apiKey + "&units=metric&lang=ru";
+            var url = `http://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&units=metric&lang=ru`;
             
             // Функция для отправки запроса
             function getWeatherForecast() {
@@ -78,14 +78,11 @@ theme: /
                         var temperature = weatherInfo.main.temp;
                         var description = weatherInfo.weather[0].description;
                         
-                        // Выводим полный ответ от API
-                        console.log("Ответ от API:", response.data);
-                        
                         // Выводим информацию о погоде
-                        console.log("Погода на " + date + ": " + temperature + "°C, " + description);
+                        console.log(`Погода на ${date}: ${temperature}°C, ${description}`);
             
                         // Отправляем информацию пользователю
-                        $reactions.answer("Погода в " + city + " на " + date + ": " + temperature + "°C, " + description);
+                        $reactions.answer(`Погода в ${city} на ${date}: ${temperature}°C, ${description}`);
                     } else {
                         // Обработка ошибки, если данные не получены
                         console.error("Не удалось получить данные о погоде.");
@@ -100,6 +97,7 @@ theme: /
             
             // Вызов функции для получения прогноза
             getWeatherForecast();
+
 
 
 
