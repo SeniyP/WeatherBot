@@ -29,15 +29,19 @@ theme: /
         intent!: /geo-date
         script:
             var city = $caila.inflect($parseTree._geo, ["nomn"]);
-            var date = $parseTree._duckling_date;
-            if (!date || !date.value) {
+            var dateEntity = $parseTree._duckling_date;
+            if (!dateEntity || !dateEntity.value) {
                 $reactions.answer("Пожалуйста, укажите дату.");
                 return;
             }
 
-            var formattedDate = new Date(date.value);
-            // Преобразуем дату в строку формата для запроса в API (например, "2024-12-31")
-            var formattedDateString = formattedDate.toISOString().split('T')[0];
+            var date = new Date(dateEntity.value);
+            if (isNaN(date)) {
+                $reactions.answer("Не удалось распознать дату. Пожалуйста, укажите дату в правильном формате.");
+                return;
+            }
+
+            var formattedDateString = date.toISOString().split('T')[0]; // Преобразуем в формат "YYYY-MM-DD"
 
             // Запрос на погоду по дате
             openWeatherMapForecast("metric", "ru", city, formattedDateString).then(function (res) {
