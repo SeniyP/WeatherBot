@@ -60,31 +60,14 @@ theme: /
         a: Могу я помочь чем то еще?
 
     state: GetWeatherWithDate
-    intent!: /date
-    script:
-        var city = $caila.inflect($parseTree._geo, ["nomn"]);
-        var date = $parseTree._date;  // Извлекаем дату
-        var formattedDate = new Date(date.timestamp).toISOString().split('T')[0];  // Преобразуем дату в формат YYYY-MM-DD
-        
-        openWeatherMapForecast("metric", "ru", city).then(function (res) {
-            if (res && res.list) {
-                var forecast = res.list.find(function (entry) {
-                    var forecastDate = new Date(entry.dt * 1000).toISOString().split('T')[0];
-                    return forecastDate === formattedDate;
-                });
-
-                if (forecast) {
-                    $reactions.answer("Прогноз на " + formattedDate + " для города " + capitalize(city) + ": " + forecast.weather[0].description + ", " + Math.round(forecast.main.temp) + "°C");
-                } else {
-                    $reactions.answer("Не могу найти прогноз для этой даты.");
-                }
-            } else {
-                $reactions.answer("Что-то сервер барахлит. Не могу узнать прогноз погоды.");
-            }
-        }).catch(function (err) {
-            $reactions.answer("Что-то сервер барахлит. Не могу узнать прогноз погоды.");
-        });
-    a: Могу я помочь чем-то еще?
+        intent!: /date
+        script:
+            var city = $caila.inflect($parseTree._geo, ["nomn"]);
+            var date = $parseTree._date;  // Извлекаем дату
+            // Формируем строку для вывода, например "Поиск информации Иркутск, 2024-12-29"
+            var formattedDate = new Date(date.timestamp).toISOString().split('T')[0];  // Преобразуем дату в формат YYYY-MM-DD
+            $reactions.answer("Поиск информации " + capitalize(city) + ", " + formattedDate);
+        a: Могу я помочь чем-то еще?
     
     state: CatchAll || noContext=true
         event!: noMatch
