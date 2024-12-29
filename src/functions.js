@@ -13,7 +13,7 @@ return $http.get("http://api.openweathermap.org/data/2.5/weather?APPID=${APPID}&
 }
 // Функция для запроса прогноза погоды на 5 дней
 function openWeatherMapForecast(units, lang, q) {
-    return $http.get(`http://api.openweathermap.org/data/2.5/forecast`, {
+    return $http.get("http://api.openweathermap.org/data/2.5/forecast", {
         timeout: 10000,
         query: {
             APPID: OPENWEATHERMAP_API_KEY,
