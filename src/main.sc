@@ -24,33 +24,37 @@ theme: /
             }).catch(function (err) {
                 $reactions.answer("Что-то сервер барахлит. Не могу узнать погоду.");
             });
-
-    state: GetWeatherByDate
-        intent!: /geo-date
+    
+    state: fullgeo
+        intent!: /fullgeo
         script:
             var city = $caila.inflect($parseTree._geo, ["nomn"]);
-            var date = $parseTree._date;
-            var formattedDate = formatDate(date.year, date.month, date.day);
-            
-            // Вставьте ваш API для получения прогноза на конкретную дату, например:
-            openWeatherMapForecast("metric", "ru", city, formattedDate).then(function (res) {
-                if (res && res.list && res.list.length > 0) {
-                    var forecast = res.list[0];  // Прогноз на выбранную дату
-                    var temp = Math.round(forecast.main.temp);
-                    var description = forecast.weather[0].description;
-                    var time = forecast.dt_txt;
-                    
-                    $reactions.answer("Прогноз на " + formattedDate + " в городе " + capitalize(city) + ": " + 
-                        "Время: " + time + ", Температура: " + temp + "°C, Описание: " + description);
+            openWeatherMapCurrent("metric", "ru", city).then(function (res) {
+                if (res && res.weather) {
+                    var temperature = Math.round(res.main.temp);
+                    var humidity = res.main.humidity;
+                    var pressure = res.main.pressure;
+                    var windSpeed = res.wind.speed;
+                    var description = res.weather[0].description;
+                    var windDirection = res.wind.deg;
+    
+                    var fullWeatherInfo = "Полная информация о погоде в городе " + capitalize(city) + ":\n" +
+                        "Температура: " + temperature + "°C\n" +
+                        "Влажность: " + humidity + "%\n" +
+                        "Давление: " + pressure + " гПа\n" +
+                        "Скорость ветра: " + windSpeed + " м/с\n" +
+                        "Направление ветра: " + windDirection + "°\n" +
+                        "Описание погоды: " + description;
+    
+                    $reactions.answer(fullWeatherInfo);
                 } else {
-                    $reactions.answer("Не могу найти прогноз на указанную дату.");
+                    $reactions.answer("Что-то сервер барахлит. Не могу узнать полную информацию о погоде.");
                 }
             }).catch(function (err) {
-                $reactions.answer("Что-то сервер барахлит. Не могу узнать прогноз на указанную дату.");
+                $reactions.answer("Что-то сервер барахлит. Не могу узнать полную информацию о погоде.");
             });
     
     state: CatchAll || noContext=true
         event!: noMatch
         a: Извините, я вас не понимаю, зато могу рассказать о погоде. Введите название города
         go: /GetWeather
-
