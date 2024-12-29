@@ -60,8 +60,16 @@ theme: /
             var city = $caila.inflect($parseTree._geo, ["nomn"]);
             var dateInput = $parseTree._date;
             
-            // Преобразуем dateInput в строку, если это не строка
-            var formattedDate = (typeof dateInput === 'string') ? dateInput.split('T')[0] : dateInput.toISOString().split('T')[0];
+            // Проверяем тип данных и если это не строка, преобразуем в объект Date
+            var formattedDate;
+            if (typeof dateInput === 'string') {
+                formattedDate = dateInput.split('T')[0];  // Если строка, разбиваем по 'T' и берем только дату
+            } else if (dateInput instanceof Date) {
+                formattedDate = dateInput.toISOString().split('T')[0];  // Если объект Date, преобразуем в строку и берем дату
+            } else {
+                $reactions.answer("Не удалось определить дату.");
+                return;
+            }
 
             openWeatherMapForecast("metric", "ru", city).then(function (res) {
                 if (res && res.list) {
