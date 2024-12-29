@@ -1,5 +1,3 @@
-# main.sc
-
 require: functions.js
 
 theme: /
@@ -27,101 +25,36 @@ theme: /
                 $reactions.answer("Что-то сервер барахлит. Не могу узнать погоду.");
             });
 
-    state: geo-date
-    intent!: /geo-date
-    script:
-        var city = $caila.inflect($parseTree._geo, ["nomn"]);
-        var dateString = $caila.inflect($parseTree._date, ["nomn"]);
-
-        // Пытаемся извлечь year, month, day из сущности @duckling.date
-        var dateInfo = $parseTree._date;
-
-        if (dateInfo && dateInfo.year && dateInfo.month && dateInfo.day) {
-            // Если дата найдена, создаем объект Date
-            var year = dateInfo.year;
-            var month = dateInfo.month - 1;  // Месяцы начинаются с 0
-            var day = dateInfo.day;
-
-            var requestedDate = new Date(year, month, day);
-
-            if (isNaN(requestedDate.getTime())) {
-                $reactions.answer("Не удалось распознать дату. Пожалуйста, укажите корректную дату.");
-                return;
-            }
-
-            // Преобразуем дату в формат YYYY-MM-DD для дальнейшего сравнения
-            requestedDate = requestedDate.toISOString().split('T')[0];
-
-            // Используем прогноз погоды на 5 дней
-            openWeatherMapForecast("metric", "ru", city).then(function (res) {
-                if (res && res.list) {
-                    var weatherOnDate = res.list.filter(function (forecast) {
-                        var forecastDate = new Date(forecast.dt * 1000).toISOString().split('T')[0];
-                        return forecastDate === requestedDate;
-                    });
-
-                    if (weatherOnDate.length > 0) {
-                        var forecastMessage = "Погода в городе " + capitalize(city) + " на " + requestedDate + ":\n";
-                        weatherOnDate.forEach(function (forecast) {
-                            var time = new Date(forecast.dt * 1000).toLocaleTimeString();
-                            var temp = Math.round(forecast.main.temp);
-                            var description = forecast.weather[0].description;
-                            forecastMessage += "Время: ${time}, Температура: ${temp}°C, Описание: ${description}\n";
-                        });
-                        $reactions.answer(forecastMessage);
-                    } else {
-                        $reactions.answer("Извините, нет прогноза погоды на эту дату.");
-                    }
-                } else {
-                    $reactions.answer("Что-то сервер барахлит. Не могу узнать погоду на указанную дату.");
-                }
-            }).catch(function (err) {
-                $reactions.answer("Что-то сервер барахлит. Не могу узнать погоду на указанную дату.");
-            });
-        } else {
-            $reactions.answer("Не удалось распознать дату. Пожалуйста, укажите корректную дату в формате YYYY-MM-DD.");
-        }
-
-
-    # Вспомогательная функция для получения названия месяца по числовому значению
-    function getMonthName(monthNumber) {
-        const months = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"];
-        return months[parseInt(monthNumber) - 1];
-    }
-
-
-
-    state: fullgeo
-        intent!: /fullgeo
+    state: GetWeatherByDate
+        intent!: /geo-date
         script:
             var city = $caila.inflect($parseTree._geo, ["nomn"]);
-            openWeatherMapCurrent("metric", "ru", city).then(function (res) {
-                if (res && res.weather) {
-                    var temperature = Math.round(res.main.temp);
-                    var humidity = res.main.humidity;
-                    var pressure = res.main.pressure;
-                    var windSpeed = res.wind.speed;
-                    var description = res.weather[0].description;
-                    var windDirection = res.wind.deg;
-    
-                    var fullWeatherInfo = "Полная информация о погоде в городе " + capitalize(city) + ":\n" +
-                        "Температура: " + temperature + "°C\n" +
-                        "Влажность: " + humidity + "%\n" +
-                        "Давление: " + pressure + " гПа\n" +
-                        "Скорость ветра: " + windSpeed + " м/с\n" +
-                        "Направление ветра: " + windDirection + "°\n" +
-                        "Описание погоды: " + description;
-    
-                    $reactions.answer(fullWeatherInfo);
+            var date = $parseTree._date;
+            var formattedDate = formatDate(date.year, date.month, date.day);
+            
+            // Вставьте ваш API для получения прогноза на конкретную дату, например:
+            openWeatherMapForecast("metric", "ru", city, formattedDate).then(function (res) {
+                if (res && res.list && res.list.length > 0) {
+                    var forecast = res.list[0];  // Прогноз на выбранную дату
+                    var temp = Math.round(forecast.main.temp);
+                    var description = forecast.weather[0].description;
+                    var time = forecast.dt_txt;
+                    
+                    $reactions.answer("Прогноз на " + formattedDate + " в городе " + capitalize(city) + ": " + 
+                        "Время: " + time + ", Температура: " + temp + "°C, Описание: " + description);
                 } else {
-                    $reactions.answer("Что-то сервер барахлит. Не могу узнать полную информацию о погоде.");
+                    $reactions.answer("Не могу найти прогноз на указанную дату.");
                 }
             }).catch(function (err) {
-                $reactions.answer("Что-то сервер барахлит. Не могу узнать полную информацию о погоде.");
+                $reactions.answer("Что-то сервер барахлит. Не могу узнать прогноз на указанную дату.");
             });
-
+    
     state: CatchAll || noContext=true
         event!: noMatch
         a: Извините, я вас не понимаю, зато могу рассказать о погоде. Введите название города
         go: /GetWeather
 
+# Функции
+function formatDate(year, month, day) {
+    return year + '-' + month.padStart(2, '0') + '-' + day.padStart(2, '0');
+}

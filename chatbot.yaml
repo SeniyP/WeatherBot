@@ -1,21 +1,24 @@
 # Название проекта
 name: weather-api
+
 # Точка входа
 entryPoint:
   - main.sc
 
-# Параметры NLU:
+# Параметры NLU (Natural Language Understanding)
 botEngine: v2
 language: ru
 
+# Настройки для обработки NLU
 nlp:
     intentNoMatchThresholds:
         phrases: 0.2
         patterns: 0.2
 
+# Инжектор настроек для API
 injector:
-    api_key: 'de907e53b9a4691b221ea39abe59380c'
+    api_key: 'de907e53b9a4691b221ea39abe59380c'  # Здесь указывается ваш API ключ для работы с внешними сервисами погоды
     slotfilling:
-        maxSlotRetries: 2
-        stopOnAnyIntent: false
-        stopOnAnyIntentThreshold: 0.2
+        maxSlotRetries: 2  # Максимальное количество повторов для сбора данных
+        stopOnAnyIntent: false  # Прекращать ли обработку, если найдено намерение
+        stopOnAnyIntentThreshold: 0.2  # Порог срабатывания намерения
