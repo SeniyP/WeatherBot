@@ -13,7 +13,7 @@ function openWeatherMapCurrent(units, lang, q) {
 }
 
 function openWeatherMapCurrent(units, lang, q) {
-    return $http.get(`http://api.openweathermap.org/data/2.5/forecast?appid=${OPENWEATHERMAP_API_KEY}&units=${units}&lang=${lang}&q=${q}`, {
+    return $http.get("http://api.openweathermap.org/data/2.5/forecast?appid=${OPENWEATHERMAP_API_KEY}&units=${units}&lang=${lang}&q=${q}", {
         timeout: 10000,
         query: {
             appid: OPENWEATHERMAP_API_KEY,  // API ключ
