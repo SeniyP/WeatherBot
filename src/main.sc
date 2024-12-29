@@ -27,7 +27,6 @@ theme: /
             }).catch(function (err) {
                 $reactions.answer("Что-то сервер барахлит. Не могу узнать погоду.");
             });
-            go: /CloseTask
     
     state: fullgeo
         intent!: /fullgeo
@@ -57,7 +56,6 @@ theme: /
             }).catch(function (err) {
                 $reactions.answer("Что-то сервер барахлит. Не могу узнать полную информацию о погоде.");
             });
-            go: /CloseTask
     
     state: CatchAll || noContext=true
         event!: noMatch

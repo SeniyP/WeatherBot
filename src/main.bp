@@ -23,5 +23,21 @@
     "id" : "/WeatherError",
     "x" : 219,
     "y" : 1446
+  }, {
+    "id" : "/CatchAll",
+    "x" : -690,
+    "y" : 378
+  }, {
+    "id" : "/fullgeo",
+    "x" : -135,
+    "y" : 607
+  }, {
+    "id" : "/GetWeather",
+    "x" : 672,
+    "y" : 359
+  }, {
+    "id" : "/CloseTask",
+    "x" : 1139,
+    "y" : 357
   } ]
 }
