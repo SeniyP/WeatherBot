@@ -24,35 +24,40 @@ theme: /
             }).catch(function (err) {
                 $reactions.answer("Что-то сервер барахлит. Не могу узнать погоду.");
             });
-
+    
     state: GetWeatherByDate
         intent!: /geo-date
         script:
             var city = $caila.inflect($parseTree._geo, ["nomn"]);
-            var date = $parseTree._duckling_date.value;
-            openWeatherMapForecast("metric", "ru", city).then(function (res) {
+            var date = $parseTree._duckling_date;
+            if (!date || !date.value) {
+                $reactions.answer("Пожалуйста, укажите дату.");
+                return;
+            }
+
+            var formattedDate = new Date(date.value);
+            // Преобразуем дату в строку формата для запроса в API (например, "2024-12-31")
+            var formattedDateString = formattedDate.toISOString().split('T')[0];
+
+            // Запрос на погоду по дате
+            openWeatherMapForecast("metric", "ru", city, formattedDateString).then(function (res) {
                 if (res && res.list) {
-                    var selectedDate = new Date(date);
-                    var selectedDateString = selectedDate.toISOString().split('T')[0]; // Формат YYYY-MM-DD
-                    
-                    // Фильтруем прогноз по дате
-                    var forecast = res.list.find(function(item) {
-                        var forecastDate = new Date(item.dt_txt).toISOString().split('T')[0];
-                        return forecastDate === selectedDateString;
+                    var weatherForDate = res.list.find(function (item) {
+                        return item.dt_txt.startsWith(formattedDateString);
                     });
-                    
-                    if (forecast) {
-                        var temperature = Math.round(forecast.main.temp);
-                        var description = forecast.weather[0].description;
-                        $reactions.answer("Прогноз погоды на " + selectedDateString + " в городе " + capitalize(city) + ": " + description + ", " + temperature + "°C.");
+
+                    if (weatherForDate) {
+                        var description = weatherForDate.weather[0].description;
+                        var temp = Math.round(weatherForDate.main.temp);
+                        $reactions.answer("Погода в городе " + capitalize(city) + " на " + formattedDateString + ": " + description + ", " + temp + "°C.");
                     } else {
-                        $reactions.answer("Для выбранной даты в городе " + capitalize(city) + " нет данных.");
+                        $reactions.answer("Не могу найти погоду на эту дату.");
                     }
                 } else {
-                    $reactions.answer("Что-то сервер барахлит. Не могу узнать погоду.");
+                    $reactions.answer("Что-то сервер барахлит. Не могу узнать погоду за указанную дату.");
                 }
             }).catch(function (err) {
-                $reactions.answer("Что-то сервер барахлит. Не могу узнать погоду.");
+                $reactions.answer("Что-то сервер барахлит. Не могу узнать погоду за указанную дату.");
             });
     
     state: fullgeo
@@ -88,4 +93,3 @@ theme: /
         event!: noMatch
         a: Извините, я вас не понимаю, зато могу рассказать о погоде. Введите название города
         go: /GetWeather
-
