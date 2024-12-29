@@ -24,6 +24,36 @@ theme: /
             }).catch(function (err) {
                 $reactions.answer("Что-то сервер барахлит. Не могу узнать погоду.");
             });
+
+    state: GetWeatherByDate
+        intent!: /geo-date
+        script:
+            var city = $caila.inflect($parseTree._geo, ["nomn"]);
+            var date = $parseTree._duckling_date.value;
+            openWeatherMapForecast("metric", "ru", city).then(function (res) {
+                if (res && res.list) {
+                    var selectedDate = new Date(date);
+                    var selectedDateString = selectedDate.toISOString().split('T')[0]; // Формат YYYY-MM-DD
+                    
+                    // Фильтруем прогноз по дате
+                    var forecast = res.list.find(function(item) {
+                        var forecastDate = new Date(item.dt_txt).toISOString().split('T')[0];
+                        return forecastDate === selectedDateString;
+                    });
+                    
+                    if (forecast) {
+                        var temperature = Math.round(forecast.main.temp);
+                        var description = forecast.weather[0].description;
+                        $reactions.answer("Прогноз погоды на " + selectedDateString + " в городе " + capitalize(city) + ": " + description + ", " + temperature + "°C.");
+                    } else {
+                        $reactions.answer("Для выбранной даты в городе " + capitalize(city) + " нет данных.");
+                    }
+                } else {
+                    $reactions.answer("Что-то сервер барахлит. Не могу узнать погоду.");
+                }
+            }).catch(function (err) {
+                $reactions.answer("Что-то сервер барахлит. Не могу узнать погоду.");
+            });
     
     state: fullgeo
         intent!: /fullgeo
@@ -58,3 +88,4 @@ theme: /
         event!: noMatch
         a: Извините, я вас не понимаю, зато могу рассказать о погоде. Введите название города
         go: /GetWeather
+
