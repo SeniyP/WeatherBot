@@ -23,3 +23,8 @@ function openWeatherMapForecast(units, lang, city, date) {
         }
     });
 }
+
+# Функции
+function formatDate(year, month, day) {
+    return year + '-' + month.padStart(2, '0') + '-' + day.padStart(2, '0');
+}

@@ -54,7 +54,3 @@ theme: /
         a: Извините, я вас не понимаю, зато могу рассказать о погоде. Введите название города
         go: /GetWeather
 
-# Функции
-function formatDate(year, month, day) {
-    return year + '-' + month.padStart(2, '0') + '-' + day.padStart(2, '0');
-}
