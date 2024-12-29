@@ -75,7 +75,6 @@ theme: /
                 if (res && res.list) {
                     var forecast = null;
                     for (var i = 0; i < res.list.length; i++) {
-                        // Ищем ближайший прогноз для выбранной даты
                         if (res.list[i].dt_txt.startsWith(formattedDate)) {
                             forecast = res.list[i];
                             break;
@@ -84,7 +83,7 @@ theme: /
                     if (forecast) {
                         var temperature = Math.round(forecast.main.temp);
                         var description = forecast.weather[0].description;
-    
+            
                         $reactions.answer("Прогноз погоды в городе " + capitalize(city) + " на " + formattedDate + ": " +
                             "температура " + temperature + "°C, " + description + ".");
                     } else {
@@ -94,7 +93,7 @@ theme: /
                     $reactions.answer("Ответ от OpenWeatherMap пустой или ошибка. Ответ: " + JSON.stringify(res));
                 }
             }).catch(function (err) {
-                $reactions.answer("Ошибка при запросе к OpenWeatherMap. Ошибка: " + JSON.stringify(err)); // Выводим ошибку
+                $reactions.answer("Ошибка при запросе к OpenWeatherMap. Ошибка: " + JSON.stringify(err));
             });
 
 
