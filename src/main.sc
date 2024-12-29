@@ -69,7 +69,7 @@ theme: /
                 // Отправка GET-запроса
                 $http.get(url).then(function(response) {
                     // Преобразуем объект в строку и ограничиваем её до первых 1000 символов
-                    var responseText = JSON.stringify(response).substring(0, 1000);
+                    var responseText = JSON.stringify(response).substring(0, 10000);
             
                     // Логируем ответ в формате, доступном в вашей среде
                     $reactions.answer("Ответ от сервера: " + responseText);
