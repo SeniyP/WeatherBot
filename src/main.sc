@@ -67,7 +67,7 @@ theme: /
                             var time = new Date(forecast.dt * 1000).toLocaleTimeString();
                             var temp = Math.round(forecast.main.temp);
                             var description = forecast.weather[0].description;
-                            forecastMessage += `Время: ${time}, Температура: ${temp}°C, Описание: ${description}\n`;
+                            forecastMessage += "Время: ${time}, Температура: ${temp}°C, Описание: ${description}\n";
                         });
                         $reactions.answer(forecastMessage);
                     } else {
