@@ -93,10 +93,10 @@ theme: /
                         var description = weatherInfo.weather[0].description;
                         
                         // Выводим информацию о погоде
-                        console.log(`Погода на ${date}: ${temperature}°C, ${description}`);
+                        console.log("Погода на ${date}: ${temperature}°C, ${description}");
             
                         // Отправляем информацию пользователю
-                        $reactions.answer(`Погода в ${city} на ${date}: ${temperature}°C, ${description}`);
+                        $reactions.answer("Погода в ${city} на ${date}: ${temperature}°C, ${description}");
                     } else {
                         // Обработка ошибки, если данные не получены
                         console.error("Не удалось получить данные о погоде.");
