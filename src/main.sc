@@ -76,7 +76,7 @@ theme: /
             var city = "Москва";  // Город для запроса
             
             // Формируем URL для запроса
-            var url = `http://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&units=metric&lang=ru`;
+            var url = "http://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&units=metric&lang=ru";
             
             // Функция для отправки запроса
             function getWeatherForecast() {
