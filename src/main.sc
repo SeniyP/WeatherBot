@@ -54,6 +54,40 @@ theme: /
                 $reactions.answer("Что-то сервер барахлит. Не могу узнать полную информацию о погоде.");
             });
     
+    state: geo-date
+    intent!: /geo-date
+    script:
+        var city = $caila.inflect($parseTree._geo, ["nomn"]);
+        var date = $caila.inflect($parseTree._date, ["nomn"]);
+        
+        openWeatherMapForecast("metric", "ru", city, date).then(function (res) {
+            if (res && res.list) {
+                var weatherOnDate = res.list.filter(function (forecast) {
+                    var forecastDate = new Date(forecast.dt * 1000).toISOString().split('T')[0];
+                    return forecastDate === date;
+                });
+                
+                if (weatherOnDate.length > 0) {
+                    var forecastMessage = "Погода в городе " + capitalize(city) + " на " + date + ":\n";
+                    weatherOnDate.forEach(function (forecast) {
+                        var time = new Date(forecast.dt * 1000).toLocaleTimeString();
+                        var temp = Math.round(forecast.main.temp);
+                        var description = forecast.weather[0].description;
+                        forecastMessage += `Время: ${time}, Температура: ${temp}°C, Описание: ${description}\n`;
+                    });
+                    $reactions.answer(forecastMessage);
+                } else {
+                    $reactions.answer("Извините, нет прогноза погоды на эту дату.");
+                }
+            } else {
+                $reactions.answer("Что-то сервер барахлит. Не могу узнать погоду на указанную дату.");
+            }
+        }).catch(function (err) {
+            $reactions.answer("Что-то сервер барахлит. Не могу узнать погоду на указанную дату.");
+        });
+
+    
+    
     state: CatchAll || noContext=true
         event!: noMatch
         a: Извините, я вас не понимаю, зато могу рассказать о погоде. Введите название города
