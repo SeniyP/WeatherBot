@@ -68,31 +68,41 @@ theme: /
             function getWeatherForecast() {
                 // Отправка GET-запроса
                 $http.get(url).then(function(response) {
-                    // Проверяем, есть ли данные в ответе
-                    if (response.data && response.data.list && response.data.list.length > 0) {
-                        var forecastData = response.data.list;
-                        var weatherInfo = forecastData[0];  // Берем данные о первой погоде (по времени)
-                        
-                        // Извлекаем информацию из ответа
-                        var date = weatherInfo.dt_txt;
-                        var temperature = weatherInfo.main.temp;
-                        var description = weatherInfo.weather[0].description;
-                        
-                        // Отправляем информацию пользователю
-                        $reactions.answer("Погода в " + city + " на " + date + ": " + temperature + "°C, " + description);
+                    if (response.status === 200) {
+                        // Проверяем, есть ли данные в ответе
+                        if (response.data && response.data.list && response.data.list.length > 0) {
+                            var forecastData = response.data.list;
+                            var weatherInfo = forecastData[0];  // Берем данные о первой погоде (по времени)
+            
+                            // Извлекаем информацию из ответа
+                            var date = weatherInfo.dt_txt;
+                            var temperature = weatherInfo.main.temp;
+                            var description = weatherInfo.weather[0].description;
+            
+                            // Отправляем информацию пользователю
+                            $reactions.answer("Погода в " + city + " на " + date + ": " + temperature + "°C, " + description);
+                        } else {
+                            // Обработка ошибки, если данных нет
+                            $reactions.answer("Не удалось получить прогноз погоды для города " + city + ". Попробуйте позже.");
+                        }
                     } else {
-                        // Обработка ошибки, если данные не получены
-                        $reactions.answer("Не удалось получить прогноз погоды. Попробуйте позже.");
+                        // Обработка ошибки, если код ответа не 200
+                        $reactions.answer("Ошибка при запросе: " + response.statusText);
                     }
                 }).catch(function(error) {
                     // Обработка ошибок при запросе
-                    $reactions.answer("Ошибка при запросе к OpenWeatherMap. Ошибка: " + error.message);
+                    if (error.response) {
+                        // Ошибка ответа от сервера
+                        $reactions.answer("Ошибка при запросе: " + error.response.statusText);
+                    } else {
+                        // Ошибка в процессе запроса
+                        $reactions.answer("Ошибка: " + error.message);
+                    }
                 });
             }
             
             // Вызов функции для получения прогноза
             getWeatherForecast();
-
 
 
 
