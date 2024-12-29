@@ -71,30 +71,44 @@ theme: /
             }
     
             // Запрос на 5-дневный прогноз
-            openWeatherMapForecast("metric", "ru", city).then(function (res) {
-                if (res && res.list) {
-                    var forecast = null;
-                    for (var i = 0; i < res.list.length; i++) {
-                        if (res.list[i].dt_txt.startsWith(formattedDate)) {
-                            forecast = res.list[i];
-                            break;
-                        }
-                    }
-                    if (forecast) {
-                        var temperature = Math.round(forecast.main.temp);
-                        var description = forecast.weather[0].description;
+            // Задайте API ключ
+            var apiKey = "de907e53b9a4691b221ea39abe59380c";  // Ваш API-ключ
+            var city = "Москва";  // Город для запроса
             
-                        $reactions.answer("Прогноз погоды в городе " + capitalize(city) + " на " + formattedDate + ": " +
-                            "температура " + temperature + "°C, " + description + ".");
+            // Формируем URL для запроса
+            var url = `http://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&units=metric&lang=ru`;
+            
+            // Функция для отправки запроса
+            function getWeatherForecast() {
+                // Отправка GET-запроса
+                $http.get(url).then(function(response) {
+                    // Проверяем, есть ли данные в ответе
+                    if (response.data && response.data.list && response.data.list.length > 0) {
+                        var forecastData = response.data.list;
+                        var weatherInfo = forecastData[0];  // Берем данные о первой погоде (по времени)
+                        
+                        // Извлекаем информацию из ответа
+                        var date = weatherInfo.dt_txt;
+                        var temperature = weatherInfo.main.temp;
+                        var description = weatherInfo.weather[0].description;
+                        
+                        // Выводим информацию о погоде
+                        console.log(`Погода на ${date}: ${temperature}°C, ${description}`);
+            
+                        // Отправляем информацию пользователю
+                        $reactions.answer(`Погода в ${city} на ${date}: ${temperature}°C, ${description}`);
                     } else {
-                        $reactions.answer("Данных о погоде в городе " + capitalize(city) + " на дату " + formattedDate + " нет.");
+                        // Обработка ошибки, если данные не получены
+                        console.error("Не удалось получить данные о погоде.");
+                        $reactions.answer("Не удалось получить прогноз погоды. Попробуйте позже.");
                     }
-                } else {
-                    $reactions.answer("Ответ от OpenWeatherMap пустой или ошибка. Ответ: " + JSON.stringify(res));
-                }
-            }).catch(function (err) {
-                $reactions.answer("Ошибка при запросе к OpenWeatherMap. Ошибка: " + JSON.stringify(err));
-            });
+                }).catch(function(error) {
+                    // Обработка ошибок при запросе
+                    console.error("Ошибка при запросе к OpenWeatherMap:", error);
+                    $reactions.answer("Ошибка при запросе к OpenWeatherMap. Ошибка: " + error.message);
+                });
+            }
+
 
 
 
