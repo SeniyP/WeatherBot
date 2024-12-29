@@ -1,9 +1,9 @@
 var OPENWEATHERMAP_API_KEY = $injector.api_key;
 
-function openWeatherMapCurrent(units, lang, q){
-    return $http.get("http://api.openweathermap.org/data/2.5/weather?APPID=${OPENWEATHERMAP_API_KEY}&units=${units}&lang=${lang}&q=${q}", {
+function openWeatherMapForecast(units, lang, q) {
+    return $http.get("http://api.openweathermap.org/data/2.5/forecast?APPID=${OPENWEATHERMAP_API_KEY}&units=${units}&lang=${lang}&q=${q}", {
         timeout: 10000,
-        query:{
+        query: {
             APPID: OPENWEATHERMAP_API_KEY,
             units: units,
             lang: lang,
@@ -12,14 +12,8 @@ function openWeatherMapCurrent(units, lang, q){
     });
 }
 
-function openWeatherMapForecast(units, lang, q, date){
-    return $http.get("http://api.openweathermap.org/data/2.5/forecast?APPID=${OPENWEATHERMAP_API_KEY}&units=${units}&lang=${lang}&q=${q}&cnt=40", {
-        timeout: 10000,
-        query:{
-            APPID: OPENWEATHERMAP_API_KEY,
-            units: units,
-            lang: lang,
-            q: q
-        }
-    });
+function formatDateForAPI(date) {
+    // Преобразуем дату в объект Date
+    var parsedDate = new Date(date);
+    return parsedDate;
 }
