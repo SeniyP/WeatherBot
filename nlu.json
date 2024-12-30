@@ -24,6 +24,24 @@
     }
   },
   "intents" : [ {
+    "path" : "/help",
+    "enabled" : true,
+    "shared" : false,
+    "phrases" : [ {
+      "text" : "Помощь"
+    }, {
+      "text" : "Мне нужна помощь"
+    }, {
+      "text" : "Хелп"
+    }, {
+      "text" : "Help"
+    } ],
+    "classificationRules" : {
+      "refs" : [ ]
+    },
+    "patterns" : [ ],
+    "priority" : 0
+  }, {
     "path" : "/geo",
     "enabled" : true,
     "shared" : false,
