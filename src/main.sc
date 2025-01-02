@@ -66,18 +66,18 @@ theme: /
         intent!: /date
         script:
             var city = $caila.inflect($parseTree._geo, ["nomn"]);
-                var date = $parseTree._date;  // Извлекаем дату
-                var formattedDate = new Date(date.timestamp).toISOString().split('T')[0];  // Преобразуем дату в формат YYYY-MM-DD
+                var date = $parseTree._date;
+                var formattedDate = new Date(date.timestamp).toISOString().split('T')[0];
                 openWeatherMapForecast("metric", "ru", city).then(function (res) {
             if (res && res.list) {
-                // Фильтруем прогнозы на указанную дату
+
                 var forecasts = res.list.filter(function (item) {
             return item.dt_txt.startsWith(formattedDate);
                 });
                 if (forecasts.length > 0) {
             var weatherInfo = "Прогноз погоды в городе " + capitalize(city) + " на " + formattedDate + ":\n";
             forecasts.forEach(function (forecast) {
-                var time = forecast.dt_txt.split(" ")[1].slice(0, 5); // Извлекаем время
+                var time = forecast.dt_txt.split(" ")[1].slice(0, 5);
                 weatherInfo += time + " — " + forecast.weather[0].description + ", " + Math.round(forecast.main.temp) + "°C\n";
             });
             $reactions.answer(weatherInfo);
