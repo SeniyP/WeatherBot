@@ -94,5 +94,5 @@ theme: /
 
     state: CatchAll || noContext=true
         event!: noMatch
-        a: Извините, я вас не понимаю, зато могу рассказать о погоде.
+        a: Извините, я вас не понимаю.
         go: /GetWeather
