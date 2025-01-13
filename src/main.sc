@@ -19,16 +19,23 @@ theme: /
             
             $http.get(url)
                 .then(function(response) {
+                    console.log(response); // Для отладки
                     if (response && response.data) {
+                        // Выводим весь ответ, чтобы понять его структуру
                         var weatherInfo = response.data.weather;
                         var activity = response.data.recommended_activity;
                         var clothing = response.data.recommended_clothing;
     
-                        $reactions.answer(weatherInfo);
-                        $reactions.answer("Рекомендуемая активность: " + activity);
-                        $reactions.answer("Рекомендуемая одежда: " + clothing);
+                        // Проверяем, если данные есть, выводим их
+                        if (weatherInfo && activity && clothing) {
+                            $reactions.answer(weatherInfo);
+                            $reactions.answer("Рекомендуемая активность: " + activity);
+                            $reactions.answer("Рекомендуемая одежда: " + clothing);
+                        } else {
+                            $reactions.answer("Ответ от сервера не содержит нужных данных.");
+                        }
                     } else {
-                        $reactions.answer("Ответ не содержит нужных данных.");
+                        $reactions.answer("Ответ не содержит данных.");
                     }
                 })
                 .catch(function(err) {
