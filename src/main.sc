@@ -22,26 +22,27 @@ theme: /
                     // Логируем полный ответ от сервера
                     $reactions.answer("Ответ от сервера: " + JSON.stringify(response));
     
-                    // Проверяем статус ответа
-                    if (response && response.status === 200) {
-                        // Проверяем, если есть данные в response.data
-                        if (response.data && response.data.weather) {
-                            var weatherInfo = response.data.weather;
-                            var activity = response.data.recommended_activity;
-                            var clothing = response.data.recommended_clothing;
+                    // Проверяем наличие данных в response.data
+                    if (response && response.data) {
+                        var data = response.data;
+                        
+                        // Логируем ответ с данными
+                        $reactions.answer("Данные получены: " + JSON.stringify(data));
     
-                            $reactions.answer("Погода: " + weatherInfo);
-                            $reactions.answer("Рекомендуемая активность: " + activity);
-                            $reactions.answer("Рекомендуемая одежда: " + clothing);
-                        } else {
-                            $reactions.answer("Ответ от сервера не содержит ожидаемых данных.");
-                        }
+                        // Проверяем данные на наличие ожидаемых полей
+                        var weatherInfo = data.weather || "Неизвестно";
+                        var activity = data.recommendedactivity || "Неизвестно";
+                        var clothing = data.recommendedclothing || "Неизвестно";
+    
+                        $reactions.answer("Погода: " + weatherInfo);
+                        $reactions.answer("Рекомендуемая активность: " + activity);
+                        $reactions.answer("Рекомендуемая одежда: " + clothing);
                     } else {
-                        $reactions.answer("Получен неожиданный статус ответа: " + response.status);
+                        $reactions.answer("Ответ от сервера не содержит ожидаемых данных.");
                     }
                 })
                 .catch(function(err) {
-                    // Выводим ошибку запроса
+                    // Логируем ошибку запроса
                     $reactions.answer("Ошибка запроса к серверу: " + err.message);
                 });
         go!: /CloseTask
