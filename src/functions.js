@@ -25,7 +25,7 @@ function openWeatherMapForecast(units, lang, q) {
 }
 
 function getWeatherActivityAndClothing(city) {
-    return $http.get("https://d916f0e2-0f17-47b5-bf66-142c6f79d239-00-g9jewjkrlxpn.janeway.replit.dev/weather?city=" + city, {
+    return $http.get("https://d916f0e2-0f17-47b5-bf66-142c6f79d239-00-g9jewjkrlxpn.janeway.replit.dev/weather?city={city}", {
         timeout: 10000
     }).then(function(response) {
         if (response.data) {
