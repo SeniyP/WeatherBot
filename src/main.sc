@@ -19,27 +19,21 @@ theme: /
     
             $http.get(url)
                 .then(function(response) {
-                    // Логируем весь ответ для отладки
-                    $reactions.answer("Ответ от сервера: " + JSON.stringify(response));
-    
-                    // Проверяем, что в ответе есть данные
+                    // Проверяем, что ответ содержит ожидаемые данные
                     if (response && response.data) {
                         var data = response.data;
     
-                        // Логируем содержимое data для отладки
-                        $reactions.answer("Полученные данные: " + JSON.stringify(data));
-    
-                        // Извлекаем ожидаемые данные с использованием ключей
+                        // Проверяем наличие каждого поля в ответе
                         var weatherInfo = data.weather || "Неизвестно";
-                        var activity = data.recommended_activity || "Неизвестно";
-                        var clothing = data.recommended_clothing || "Неизвестно";
+                        var activity = data.recommendedactivity || "Неизвестно";
+                        var clothing = data.recommendedclothing || "Неизвестно";
     
-                        // Выводим результаты
+                        // Отправляем информацию обратно пользователю
                         $reactions.answer("Погода: " + weatherInfo);
                         $reactions.answer("Рекомендуемая активность: " + activity);
                         $reactions.answer("Рекомендуемая одежда: " + clothing);
                     } else {
-                        // Если данные отсутствуют в ответе
+                        // Если ответ не содержит данных
                         $reactions.answer("Ответ от сервера не содержит ожидаемых данных.");
                     }
                 })
@@ -48,6 +42,7 @@ theme: /
                     $reactions.answer("Ошибка запроса к серверу: " + err.message);
                 });
         go!: /CloseTask
+
 
         
     state: CloseTask
