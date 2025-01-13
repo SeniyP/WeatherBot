@@ -14,31 +14,32 @@ theme: /
     state: Test
         intent!: /Test
         script:
-        // Получаем город из запроса или по умолчанию Москва
-        var city = "Moscow"; // Можно динамически изменить, если нужен ввод от пользователя
-
-        // Отправляем запрос на сервер с погодой, активностью и одеждой
-        fetch(`https://d916f0e2-0f17-47b5-bf66-142c6f79d239-00-g9jewjkrlxpn.janeway.replit.dev/weather?city=${city}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.weather && data.activity && data.clothing) {
-                    // Формируем ответ для пользователя
-                    var weatherDescription = data.weather;
-                    var activity = data.activity;
-                    var clothing = data.clothing;
-                    var responseMessage = `Сегодня в городе ${capitalize(city)}: ${weatherDescription}. Одежда: ${clothing}. Активность: ${activity}.`;
-
-                    // Отправляем ответ пользователю
-                    $reactions.answer(responseMessage);
-                } else {
+            var city = "Moscow"; // можно заменить на переменную, если получаете город от пользователя
+    
+            // Запрос на внешний сервер через fetch
+            var url = "https://d916f0e2-0f17-47b5-bf66-142c6f79d239-00-g9jewjkrlxpn.janeway.replit.dev/weather?city=" + city;
+            
+            $fetch(url, {method: 'GET'})
+                .then(function(response) {
+                    return response.json();  // преобразуем в JSON
+                })
+                .then(function(data) {
+                    if (data.weather && data.activity && data.clothing) {
+                        // Получаем данные и формируем сообщение для пользователя
+                        var weatherDescription = data.weather;
+                        var activity = data.activity;
+                        var clothing = data.clothing;
+                        var responseMessage = "Сегодня в городе " + capitalize(city) + ": " + weatherDescription + ". Одежда: " + clothing + ". Активность: " + activity + ".";
+                        $reactions.answer(responseMessage); // Отправляем ответ пользователю
+                    } else {
+                        $reactions.answer("Что-то сервер не отвечает. Не могу узнать погоду.");
+                    }
+                })
+                .catch(function(error) {
                     $reactions.answer("Что-то сервер не отвечает. Не могу узнать погоду.");
-                }
-            })
-            .catch(error => {
-                $reactions.answer("Что-то сервер не отвечает. Не могу узнать погоду.");
-            });
+                });
 
-    go!: /CloseTask
+        go!: /CloseTask
         
     state: CloseTask
         a: Могу я помочь чем то еще?
