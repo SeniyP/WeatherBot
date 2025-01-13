@@ -16,17 +16,14 @@ theme: /
         script:
             var city = "Moscow"; // или используйте динамический ввод от пользователя
             getWeatherActivityAndClothing(city).then(function(data) {
-                if (data.weather && data.activity && data.clothing) {
-                    var weatherDescription = data.weather;
-                    var activity = data.activity;
-                    var clothing = data.clothing;
-                    var responseMessage = "Сегодня в городе " + capitalize(city) + ": " + weatherDescription + ". Одежда: " + clothing + ". Активность: " + activity + ".";
-                    $reactions.answer(responseMessage);
+                if (data) {
+                    // Отправляем весь текст, полученный от сервера
+                    $reactions.answer(data);
                 } else {
-                    $reactions.answer("Не удалось получить полные данные о погоде.");
+                    $reactions.answer("Не удалось получить данные о погоде.");
                 }
             }).catch(function(error) {
-                $reactions.answer("Произошла ошибка при получении данных.");
+                $reactions.answer("Произошла ошибка при получении данных: " + error.message);
             });
         go!: /CloseTask
         
