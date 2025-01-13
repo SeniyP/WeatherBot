@@ -31,8 +31,8 @@ theme: /
     
                         // Извлекаем ожидаемые данные с использованием ключей
                         var weatherInfo = data.weather || "Неизвестно";
-                        var activity = data.recommendedactivity || "Неизвестно";
-                        var clothing = data.recommendedclothing || "Неизвестно";
+                        var activity = data.recommended_activity || "Неизвестно";
+                        var clothing = data.recommended_clothing || "Неизвестно";
     
                         // Выводим результаты
                         $reactions.answer("Погода: " + weatherInfo);
