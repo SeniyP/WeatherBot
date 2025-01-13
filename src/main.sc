@@ -19,14 +19,16 @@ theme: /
             
             $http.get(url)
                 .then(function(response) {
-                    console.log(response); // Для отладки
+                    // Выводим весь ответ от сервера в чат
+                    var fullResponse = JSON.stringify(response.data);
+                    $reactions.answer("Ответ от сервера: " + fullResponse);
+    
+                    // Проверяем, если данные есть, выводим их
                     if (response && response.data) {
-                        // Выводим весь ответ, чтобы понять его структуру
                         var weatherInfo = response.data.weather;
                         var activity = response.data.recommended_activity;
                         var clothing = response.data.recommended_clothing;
     
-                        // Проверяем, если данные есть, выводим их
                         if (weatherInfo && activity && clothing) {
                             $reactions.answer(weatherInfo);
                             $reactions.answer("Рекомендуемая активность: " + activity);
@@ -39,10 +41,10 @@ theme: /
                     }
                 })
                 .catch(function(err) {
-                    console.log(err); // Для отладки
                     $reactions.answer("Ошибка запроса к серверу.");
                 });
         go!: /CloseTask
+
         
     state: CloseTask
         a: Могу я помочь чем то еще?
