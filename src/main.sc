@@ -19,23 +19,27 @@ theme: /
     
             $http.get(url)
                 .then(function(response) {
-                    // Проверяем, что ответ содержит ожидаемые данные
-                    if (response && response.data) {
-                        var data = response.data;
+                    // Логируем весь ответ как текст
+                    var responseText = JSON.stringify(response);
+                    $reactions.answer("Ответ от сервера (текст): " + responseText);
     
-                        // Проверяем наличие каждого поля в ответе
-                        var weatherInfo = data.weather || "Неизвестно";
-                        var activity = data.recommendedactivity || "Неизвестно";
-                        var clothing = data.recommendedclothing || "Неизвестно";
+                    // Извлекаем нужные данные, если они присутствуют в ответе
+                    var weatherPattern = /"weather":"([^"]+)"/;
+                    var activityPattern = /"recommendedactivity":"([^"]+)"/;
+                    var clothingPattern = /"recommendedclothing":"([^"]+)"/;
     
-                        // Отправляем информацию обратно пользователю
-                        $reactions.answer("Погода: " + weatherInfo);
-                        $reactions.answer("Рекомендуемая активность: " + activity);
-                        $reactions.answer("Рекомендуемая одежда: " + clothing);
-                    } else {
-                        // Если ответ не содержит данных
-                        $reactions.answer("Ответ от сервера не содержит ожидаемых данных.");
-                    }
+                    var weatherMatch = responseText.match(weatherPattern);
+                    var activityMatch = responseText.match(activityPattern);
+                    var clothingMatch = responseText.match(clothingPattern);
+    
+                    // Проверяем и выводим извлеченные данные
+                    var weatherInfo = weatherMatch ? weatherMatch[1] : "Неизвестно";
+                    var activity = activityMatch ? activityMatch[1] : "Неизвестно";
+                    var clothing = clothingMatch ? clothingMatch[1] : "Неизвестно";
+    
+                    $reactions.answer("Погода: " + weatherInfo);
+                    $reactions.answer("Рекомендуемая активность: " + activity);
+                    $reactions.answer("Рекомендуемая одежда: " + clothing);
                 })
                 .catch(function(err) {
                     // Логируем ошибку запроса
