@@ -14,31 +14,20 @@ theme: /
     state: Test
         intent!: /Test
         script:
-            var city = "Moscow"; // можно заменить на переменную, если получаете город от пользователя
-    
-            // Запрос на внешний сервер через fetch
-            var url = "https://d916f0e2-0f17-47b5-bf66-142c6f79d239-00-g9jewjkrlxpn.janeway.replit.dev/weather?city=" + city;
-            
-            $fetch(url, {method: 'GET'})
-                .then(function(response) {
-                    return response.json();  // преобразуем в JSON
-                })
-                .then(function(data) {
-                    if (data.weather && data.activity && data.clothing) {
-                        // Получаем данные и формируем сообщение для пользователя
-                        var weatherDescription = data.weather;
-                        var activity = data.activity;
-                        var clothing = data.clothing;
-                        var responseMessage = "Сегодня в городе " + capitalize(city) + ": " + weatherDescription + ". Одежда: " + clothing + ". Активность: " + activity + ".";
-                        $reactions.answer(responseMessage); // Отправляем ответ пользователю
-                    } else {
-                        $reactions.answer("Что-то сервер не отвечает. Не могу узнать погоду.");
-                    }
-                })
-                .catch(function(error) {
-                    $reactions.answer("Что-то сервер не отвечает. Не могу узнать погоду.");
-                });
-
+            var city = "Moscow"; // или используйте динамический ввод от пользователя
+            getWeatherActivityAndClothing(city).then(function(data) {
+                if (data.weather && data.activity && data.clothing) {
+                    var weatherDescription = data.weather;
+                    var activity = data.activity;
+                    var clothing = data.clothing;
+                    var responseMessage = "Сегодня в городе " + capitalize(city) + ": " + weatherDescription + ". Одежда: " + clothing + ". Активность: " + activity + ".";
+                    $reactions.answer(responseMessage);
+                } else {
+                    $reactions.answer("Не удалось получить полные данные о погоде.");
+                }
+            }).catch(function(error) {
+                $reactions.answer("Произошла ошибка при получении данных.");
+            });
         go!: /CloseTask
         
     state: CloseTask
