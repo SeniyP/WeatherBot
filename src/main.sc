@@ -15,33 +15,35 @@ theme: /
         intent!: /Test
         script:
             var city = "Moscow"; // Можно изменить на динамическое значение, если нужно
-            var url = "https://d916f0e2-0f17-47b5-bf66-142c6f79d239-00-g9jewjkrlxpn.janeway.replit.dev/weather?city=Moscow";
+            var url = "https://d916f0e2-0f17-47b5-bf66-142c6f79d239-00-g9jewjkrlxpn.janeway.replit.dev/weather?city=" + city;
             
             $http.get(url)
                 .then(function(response) {
-                    // Выводим весь ответ от сервера в чат
-                    var fullResponse = JSON.stringify(response.data);
-                    $reactions.answer("Ответ от сервера: " + fullResponse);
+                    // Проверяем статус ответа
+                    if (response && response.status === 200) {
+                        // Выводим весь ответ от сервера для диагностики
+                        var fullResponse = JSON.stringify(response.data);
+                        $reactions.answer("Ответ от сервера: " + fullResponse);
     
-                    // Проверяем, если данные есть, выводим их
-                    if (response && response.data) {
-                        var weatherInfo = response.data.weather;
-                        var activity = response.data.recommended_activity;
-                        var clothing = response.data.recommended_clothing;
+                        // Проверяем, если данные есть, выводим их
+                        if (response.data && response.data.weather) {
+                            var weatherInfo = response.data.weather;
+                            var activity = response.data.recommended_activity;
+                            var clothing = response.data.recommended_clothing;
     
-                        if (weatherInfo && activity && clothing) {
                             $reactions.answer(weatherInfo);
                             $reactions.answer("Рекомендуемая активность: " + activity);
                             $reactions.answer("Рекомендуемая одежда: " + clothing);
                         } else {
-                            $reactions.answer("Ответ от сервера не содержит нужных данных.");
+                            $reactions.answer("Ответ от сервера не содержит ожидаемых данных.");
                         }
                     } else {
-                        $reactions.answer("Ответ не содержит данных.");
+                        $reactions.answer("Получен неожиданный статус ответа: " + response.status);
                     }
                 })
                 .catch(function(err) {
-                    $reactions.answer("Ошибка запроса к серверу.");
+                    // Выводим ошибку запроса
+                    $reactions.answer("Ошибка запроса к серверу: " + err.message);
                 });
         go!: /CloseTask
 
