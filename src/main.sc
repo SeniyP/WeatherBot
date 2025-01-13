@@ -19,25 +19,27 @@ theme: /
     
             $http.get(url)
                 .then(function(response) {
-                    // Логируем полный ответ от сервера
+                    // Логируем весь ответ для отладки
                     $reactions.answer("Ответ от сервера: " + JSON.stringify(response));
     
-                    // Проверяем наличие данных в response.data
+                    // Проверяем, что в ответе есть данные
                     if (response && response.data) {
                         var data = response.data;
-                        
-                        // Логируем ответ с данными
-                        $reactions.answer("Данные получены: " + JSON.stringify(data));
     
-                        // Проверяем данные на наличие ожидаемых полей
+                        // Логируем содержимое data для отладки
+                        $reactions.answer("Полученные данные: " + JSON.stringify(data));
+    
+                        // Извлекаем ожидаемые данные с использованием ключей
                         var weatherInfo = data.weather || "Неизвестно";
                         var activity = data.recommendedactivity || "Неизвестно";
                         var clothing = data.recommendedclothing || "Неизвестно";
     
+                        // Выводим результаты
                         $reactions.answer("Погода: " + weatherInfo);
                         $reactions.answer("Рекомендуемая активность: " + activity);
                         $reactions.answer("Рекомендуемая одежда: " + clothing);
                     } else {
+                        // Если данные отсутствуют в ответе
                         $reactions.answer("Ответ от сервера не содержит ожидаемых данных.");
                     }
                 })
