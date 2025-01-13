@@ -14,17 +14,27 @@ theme: /
     state: Test
         intent!: /Test
         script:
-            var city = "Moscow"; // или используйте динамический ввод от пользователя
-            getWeatherActivityAndClothing(city).then(function(data) {
-                if (data) {
-                    // Отправляем весь текст, полученный от сервера
-                    $reactions.answer(data);
-                } else {
-                    $reactions.answer("Не удалось получить данные о погоде.");
-                }
-            }).catch(function(error) {
-                $reactions.answer("Произошла ошибка при получении данных: " + error.message);
-            });
+            // Отправляем запрос на сервер для получения погоды, активности и одежды
+            fetch(`https://d916f0e2-0f17-47b5-bf66-142c6f79d239-00-g9jewjkrlxpn.janeway.replit.dev/weather?city=Moscow`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.weather && data.recommended_activity && data.recommended_clothing) {
+                        // Формируем ответ для пользователя
+                        var weatherInfo = data.weather;
+                        var activity = data.recommended_activity;
+                        var clothing = data.recommended_clothing;
+                        
+                        // Отправляем пользователю погодную информацию, активность и одежду
+                        $reactions.answer(weatherInfo);
+                        $reactions.answer("Рекомендуемая активность: " + activity);
+                        $reactions.answer("Рекомендуемая одежда: " + clothing);
+                    } else {
+                        $reactions.answer("Что-то сервер не отвечает. Не могу узнать погоду.");
+                    }
+                })
+                .catch(function (err) {
+                    $reactions.answer("Что-то сервер не отвечает. Не могу узнать погоду.");
+                });
         go!: /CloseTask
         
     state: CloseTask
