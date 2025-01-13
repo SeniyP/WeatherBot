@@ -14,24 +14,26 @@ theme: /
     state: Test
         intent!: /Test
         script:
-            // Отправляем запрос на сервер с использованием $http
-            $http.get('https://d916f0e2-0f17-47b5-bf66-142c6f79d239-00-g9jewjkrlxpn.janeway.replit.dev/weather?city=Moscow')
+            var city = "Moscow"; // Можно изменить на динамическое значение, если нужно
+            var url = `https://d916f0e2-0f17-47b5-bf66-142c6f79d239-00-g9jewjkrlxpn.janeway.replit.dev/weather?city=${city}`;
+            
+            $http.get(url)
                 .then(function(response) {
                     if (response && response.data) {
                         var weatherInfo = response.data.weather;
                         var activity = response.data.recommended_activity;
                         var clothing = response.data.recommended_clothing;
-                        
-                        // Отправляем пользователю погодную информацию, активность и одежду
+    
                         $reactions.answer(weatherInfo);
                         $reactions.answer("Рекомендуемая активность: " + activity);
                         $reactions.answer("Рекомендуемая одежда: " + clothing);
                     } else {
-                        $reactions.answer("Что-то сервер не отвечает. Не могу узнать погоду.");
+                        $reactions.answer("Ответ не содержит нужных данных.");
                     }
                 })
                 .catch(function(err) {
-                    $reactions.answer("Что-то сервер не отвечает. Не могу узнать погоду.");
+                    console.log(err); // Для отладки
+                    $reactions.answer("Ошибка запроса к серверу.");
                 });
         go!: /CloseTask
         
