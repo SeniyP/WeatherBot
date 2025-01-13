@@ -14,7 +14,7 @@ theme: /
     state: Test
         intent!: /Test
         script:
-            var city = "Moscow"; // Можно изменить на динамическое значение, если нужно
+            var city = "Иркутск"; // Можно изменить на динамическое значение, если нужно
             var url = "https://d916f0e2-0f17-47b5-bf66-142c6f79d239-00-g9jewjkrlxpn.janeway.replit.dev/weather?city=" + city;
     
             $http.get(url)
