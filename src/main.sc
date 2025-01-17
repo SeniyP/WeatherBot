@@ -14,14 +14,7 @@ theme: /
     state: Test
         intent!: /Test
         script:
-          
-            
-            // Извлекаем город из пользовательского ввода
-            var city = $parseTree._geo ? $caila.inflect($parseTree._geo, ["nomn"]) : "Москва"; // Город по умолчанию — "Москва"
-    
-            
-    
-            // Вызываем функцию из weatherRequest.js
+            var city = $parseTree._geo ? $caila.inflect($parseTree._geo, ["nomn"]); // Город по умолчанию — "Москва"
             getWeatherRecommendation(city, "clothing", $reactions);
         go!: /CloseTask
 
