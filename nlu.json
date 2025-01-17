@@ -137,7 +137,7 @@
       "name" : "geo",
       "entity" : "mystem.geo",
       "required" : true,
-      "prompts" : [ "Введите город" ]
+      "prompts" : [ ]
     } ],
     "priority" : 0
   }, {
