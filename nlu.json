@@ -202,7 +202,9 @@
     "path" : "/comands",
     "enabled" : true,
     "shared" : false,
-    "phrases" : [ ],
+    "phrases" : [ {
+      "text" : "Команды"
+    } ],
     "classificationRules" : {
       "refs" : [ ]
     },
