@@ -92,28 +92,6 @@
     } ],
     "priority" : 0
   }, {
-    "path" : "/пока",
-    "enabled" : true,
-    "shared" : false,
-    "phrases" : [ {
-      "text" : "пока"
-    } ],
-    "classificationRules" : {
-      "refs" : [ ]
-    },
-    "priority" : 0
-  }, {
-    "path" : "/привет",
-    "enabled" : true,
-    "shared" : false,
-    "phrases" : [ {
-      "text" : "привет"
-    } ],
-    "classificationRules" : {
-      "refs" : [ ]
-    },
-    "priority" : 0
-  }, {
     "path" : "/fullgeo",
     "enabled" : true,
     "shared" : false,
@@ -179,18 +157,48 @@
     } ],
     "priority" : 0
   }, {
-    "path" : "/activity",
+    "path" : "/Ban",
     "enabled" : true,
     "shared" : false,
-    "phrases" : [ ],
+    "phrases" : [ {
+      "text" : "@mystem.obsc"
+    } ],
     "classificationRules" : {
       "refs" : [ ]
     },
     "patterns" : [ ],
+    "slots" : [ {
+      "name" : "mystem.obsc",
+      "entity" : "mystem.obsc",
+      "required" : true,
+      "prompts" : [ ]
+    } ],
+    "priority" : 0
+  }, {
+    "path" : "/activity",
+    "enabled" : true,
+    "shared" : false,
+    "phrases" : [ {
+      "text" : "Чем мне заняться в @mystem.geo?"
+    }, {
+      "text" : "Что делать в @mystem.geo?"
+    }, {
+      "text" : "Какую активность ты мне посоветуешь в @mystem.geo?"
+    } ],
+    "classificationRules" : {
+      "refs" : [ ]
+    },
+    "patterns" : [ ],
+    "slots" : [ {
+      "name" : "geo",
+      "entity" : "mystem.geo",
+      "required" : true,
+      "prompts" : [ ]
+    } ],
     "priority" : 0
   } ],
   "entities" : [ ],
-  "enabledSystemEntities" : [ "mystem.geo", "pymorphy.geox", "duckling.number", "duckling.time", "duckling.date", "duckling.time-of-day", "duckling.duration", "duckling.phone-number", "duckling.email", "duckling.url" ],
+  "enabledSystemEntities" : [ "mystem.geo", "mystem.obsc", "pymorphy.geox", "duckling.number", "duckling.time", "duckling.date", "duckling.time-of-day", "duckling.duration", "duckling.phone-number", "duckling.email", "duckling.url", "mlps-obscene.obscene" ],
   "spellerDictionary" : [ ],
   "systemEntities" : [ {
     "name" : "mystem.geo",
@@ -200,7 +208,7 @@
     "enabled" : false
   }, {
     "name" : "mystem.obsc",
-    "enabled" : false
+    "enabled" : true
   }, {
     "name" : "mystem.patrn",
     "enabled" : false
@@ -287,7 +295,7 @@
     "enabled" : false
   }, {
     "name" : "mlps-obscene.obscene",
-    "enabled" : false
+    "enabled" : true
   }, {
     "name" : "zb.datetime",
     "enabled" : false

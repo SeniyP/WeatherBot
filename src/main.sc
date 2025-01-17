@@ -6,6 +6,11 @@ theme: /
         q!: $regex</start>
         a: Привет!
         go!: /HelpInfo
+   
+    state: Start
+        intent!: /Ban
+        a: Ругательства это плохо
+        go!: /HelpInfo
     
     state: HelpInfo
         intent!: /help
