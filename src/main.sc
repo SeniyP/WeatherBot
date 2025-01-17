@@ -17,10 +17,11 @@ theme: /
           
             
             // Извлекаем город из пользовательского ввода
-            var city = $parseTree._geo ? $caila.inflect($parseTree._geo, ["nomn"]); // Город по умолчанию — "Москва"
+            var city = $parseTree._geo ? $caila.inflect($parseTree._geo, ["nomn"]) : "Москва"; // Город по умолчанию — "Москва"
+    
     
             // Вызываем функцию из weatherRequest.js
-            getWeatherRecommendation(city, type, "clothing");
+            getWeatherRecommendation(city, type, $reactions);
         go!: /CloseTask
 
 
