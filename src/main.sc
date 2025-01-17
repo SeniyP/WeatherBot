@@ -10,15 +10,6 @@ theme: /
     state: HelpInfo
         intent!: /help
         a: Я электронный помощник. Я могу сообщить вам текущую погоду в любом крупном городе. Вы можете запросить полную информацию, или информацию на конкретную дату.
-    
-    state: Test
-        intent!: /Test
-        script:
-            var city = $parseTree._geo ? $caila.inflect($parseTree._geo, ["nomn"]) : "Москва";
-            getWeatherRecommendation(city, "clothing", $reactions);
-        go!: /CloseTask
-
-
         
     state: CloseTask
         a: Могу я помочь чем то еще?
