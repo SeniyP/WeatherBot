@@ -7,7 +7,7 @@ theme: /
         a: Привет!
         go!: /HelpInfo
    
-    state: Start
+    state: Ban
         intent!: /Ban
         a: Ругательства это плохо
         go!: /HelpInfo
