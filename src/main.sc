@@ -102,6 +102,7 @@ theme: /
         intent!: /activity
         script:
             var city = $parseTree._geo ? $caila.inflect($parseTree._geo, ["nomn"]) : "Москва";
+            $reactions.answer("Ищу погоду для города: " + city);  // Добавьте эту строку для отладки
             getWeatherRecommendation(city, "activity", $reactions);
         go!: /CloseTask
     
@@ -109,6 +110,7 @@ theme: /
         intent!: /clothing
         script:
             var city = $parseTree._geo ? $caila.inflect($parseTree._geo, ["nomn"]) : "Москва";
+            $reactions.answer("Ищу погоду для города: " + city);  // Добавьте эту строку для отладки
             getWeatherRecommendation(city, "clothing", $reactions);
         go!: /CloseTask
 

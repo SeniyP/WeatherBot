@@ -49,6 +49,8 @@
       "text" : "@mystem.geo"
     }, {
       "text" : "Какая погода сейчас в @mystem.geo"
+    }, {
+      "text" : "Погода в @mystem.geo"
     } ],
     "classificationRules" : {
       "refs" : [ ]
