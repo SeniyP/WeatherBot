@@ -14,7 +14,7 @@ theme: /
     state: Test
         intent!: /Test
         script:
-            var city = $parseTree._geo ? $caila.inflect($parseTree._geo, ["nomn"]); // Город по умолчанию — "Москва"
+            var city = $parseTree._geo ? $caila.inflect($parseTree._geo, ["nomn"]) : "Москва";
             getWeatherRecommendation(city, "clothing", $reactions);
         go!: /CloseTask
 
@@ -105,13 +105,15 @@ theme: /
     state: Activity
         intent!: /activity
         script:
-          
+            var city = $parseTree._geo ? $caila.inflect($parseTree._geo, ["nomn"]) : "Москва";
+            getWeatherRecommendation(city, "activity", $reactions);
         go!: /CloseTask
     
     state: Clothing
         intent!: /clothing
         script:
-          
+            var city = $parseTree._geo ? $caila.inflect($parseTree._geo, ["nomn"]) : "Москва";
+            getWeatherRecommendation(city, "clothing", $reactions);
         go!: /CloseTask
 
     state: CatchAll || noContext=true
