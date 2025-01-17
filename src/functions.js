@@ -32,14 +32,20 @@ function getWeatherRecommendation(city, type, reactions) {
             // Логируем весь ответ как текст
             var responseText = JSON.stringify(response);
 
-            // Извлекаем нужные данные
+            // Извлекаем данные о погоде, активности и одежде
+            var weatherPattern = /"weather":"([^"]+)"/;
             var activityPattern = /"recommended_activity":"([^"]+)"/;
             var clothingPattern = /"recommended_clothing":"([^"]+)"/;
 
+            var weatherMatch = responseText.match(weatherPattern);
             var activityMatch = responseText.match(activityPattern);
             var clothingMatch = responseText.match(clothingPattern);
 
-            // Выбираем информацию в зависимости от типа
+            // Всегда выводим информацию о погоде
+            var weatherInfo = weatherMatch ? weatherMatch[1] : "Неизвестно";
+            reactions.answer("Погода в городе " + city + ": " + weatherInfo);
+
+            // Выводим информацию в зависимости от типа
             if (type === "activity") {
                 var activity = activityMatch ? activityMatch[1] : "Неизвестно";
                 reactions.answer("Рекомендуемая активность: " + activity);
