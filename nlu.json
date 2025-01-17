@@ -165,12 +165,18 @@
     "enabled" : true,
     "shared" : false,
     "phrases" : [ {
-      "text" : "Тест"
+      "text" : "Тест @mystem.geo"
     } ],
     "classificationRules" : {
       "refs" : [ ]
     },
     "patterns" : [ ],
+    "slots" : [ {
+      "name" : "geo",
+      "entity" : "mystem.geo",
+      "required" : true,
+      "prompts" : [ ]
+    } ],
     "priority" : 0
   } ],
   "entities" : [ ],

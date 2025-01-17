@@ -14,7 +14,7 @@ theme: /
     state: Test
         intent!: /Test
         script:
-            var city = "Иркутск"; // Можно изменить на динамическое значение, если нужно
+            var city = $parseTree._geo ? $caila.inflect($parseTree._geo, ["nomn"]) : "Москва"; // Извлекаем город или используем "Москва" по умолчанию
             var url = "https://d916f0e2-0f17-47b5-bf66-142c6f79d239-00-g9jewjkrlxpn.janeway.replit.dev/weather?city=" + city;
     
             $http.get(url)
@@ -25,8 +25,8 @@ theme: /
     
                     // Извлекаем нужные данные, если они присутствуют в ответе
                     var weatherPattern = /"weather":"([^"]+)"/;
-                    var activityPattern = /"recommended_activity":"([^"]+)"/;
-                    var clothingPattern = /"recommended_clothing":"([^"]+)"/;
+                    var activityPattern = /"recommendedactivity":"([^"]+)"/;
+                    var clothingPattern = /"recommendedclothing":"([^"]+)"/;
     
                     var weatherMatch = responseText.match(weatherPattern);
                     var activityMatch = responseText.match(activityPattern);
@@ -37,6 +37,7 @@ theme: /
                     var activity = activityMatch ? activityMatch[1] : "Неизвестно";
                     var clothing = clothingMatch ? clothingMatch[1] : "Неизвестно";
     
+                    $reactions.answer("Город: " + city);
                     $reactions.answer("Погода: " + weatherInfo);
                     $reactions.answer("Рекомендуемая активность: " + activity);
                     $reactions.answer("Рекомендуемая одежда: " + clothing);
