@@ -198,6 +198,16 @@
       "prompts" : [ ]
     } ],
     "priority" : 0
+  }, {
+    "path" : "/comands",
+    "enabled" : true,
+    "shared" : false,
+    "phrases" : [ ],
+    "classificationRules" : {
+      "refs" : [ ]
+    },
+    "patterns" : [ ],
+    "priority" : 0
   } ],
   "entities" : [ ],
   "enabledSystemEntities" : [ "mystem.geo", "mystem.obsc", "pymorphy.geox", "duckling.number", "duckling.time", "duckling.date", "duckling.time-of-day", "duckling.duration", "duckling.phone-number", "duckling.email", "duckling.url", "mlps-obscene.obscene" ],
