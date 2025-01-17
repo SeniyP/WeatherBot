@@ -25,8 +25,8 @@ theme: /
     
                     // Извлекаем нужные данные, если они присутствуют в ответе
                     var weatherPattern = /"weather":"([^"]+)"/;
-                    var activityPattern = /"recommendedactivity":"([^"]+)"/;
-                    var clothingPattern = /"recommendedclothing":"([^"]+)"/;
+                    var activityPattern = /"recommended_activity":"([^"]+)"/;
+                    var clothingPattern = /"recommended_clothing":"([^"]+)"/;
     
                     var weatherMatch = responseText.match(weatherPattern);
                     var activityMatch = responseText.match(activityPattern);
@@ -47,7 +47,6 @@ theme: /
                     $reactions.answer("Ошибка запроса к серверу: " + err.message);
                 });
         go!: /CloseTask
-
 
         
     state: CloseTask
