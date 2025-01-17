@@ -101,16 +101,32 @@ theme: /
     state: Activity
         intent!: /activity
         script:
-            var city = $parseTree._geo ? $caila.inflect($parseTree._geo, ["nomn"]) : "Москва";
-            $reactions.answer("Ищу погоду для города: " + city);  // Добавьте эту строку для отладки
+            // Проверяем данные о геолокации
+            var city = $parseTree._geo ? $caila.inflect($parseTree._geo, ["nomn"]) : null;
+            $reactions.answer("Данные геолокации: " + JSON.stringify($parseTree._geo));  // Для отладки
+    
+            if (!city) {
+                city = "Москва";  // Если город не извлечен, ставим значение по умолчанию
+                $reactions.answer("Не удалось определить город, использую значение по умолчанию: Москва.");
+            }
+            
+            $reactions.answer("Ищу погоду для города: " + city);
             getWeatherRecommendation(city, "activity", $reactions);
         go!: /CloseTask
     
     state: Clothing
         intent!: /clothing
         script:
-            var city = $caila.inflect($parseTree._geo, ["nomn"]);
-            $reactions.answer("Ищу погоду для города: " + city);  // Добавьте эту строку для отладки
+            // Проверяем данные о геолокации
+            var city = $parseTree._geo ? $caila.inflect($parseTree._geo, ["nomn"]) : null;
+            $reactions.answer("Данные геолокации: " + JSON.stringify($parseTree._geo));  // Для отладки
+    
+            if (!city) {
+                city = "Москва";  // Если город не извлечен, ставим значение по умолчанию
+                $reactions.answer("Не удалось определить город, использую значение по умолчанию: Москва.");
+            }
+    
+            $reactions.answer("Ищу погоду для города: " + city);
             getWeatherRecommendation(city, "clothing", $reactions);
         go!: /CloseTask
 
