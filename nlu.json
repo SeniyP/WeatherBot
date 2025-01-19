@@ -105,6 +105,8 @@
       "text" : "Инфо @mystem.geo"
     }, {
       "text" : "Все про @mystem.geo"
+    }, {
+      "text" : "Полная информация о погоде в @mystem.geo"
     } ],
     "classificationRules" : {
       "refs" : [ ]
@@ -145,7 +147,7 @@
     "enabled" : true,
     "shared" : false,
     "phrases" : [ {
-      "text" : "Тест @mystem.geo"
+      "text" : "@Повседнев"
     } ],
     "classificationRules" : {
       "refs" : [ ]
@@ -153,7 +155,7 @@
     "patterns" : [ ],
     "slots" : [ {
       "name" : "geo",
-      "entity" : "mystem.geo",
+      "entity" : "Повседнев",
       "required" : true,
       "prompts" : [ ]
     } ],
@@ -211,7 +213,30 @@
     "patterns" : [ ],
     "priority" : 0
   } ],
-  "entities" : [ ],
+  "entities" : [ {
+    "entity" : {
+      "name" : "Повседнев",
+      "enabled" : true,
+      "shared" : false,
+      "type" : "annotation",
+      "priority" : 1,
+      "noSpelling" : true,
+      "noMorph" : false,
+      "phoneticSearch" : false,
+      "fuzzySearch" : false,
+      "client" : false,
+      "hidden" : false
+    },
+    "records" : [ {
+      "type" : "synonyms",
+      "rule" : [ "Минимал" ],
+      "value" : ""
+    }, {
+      "type" : "synonyms",
+      "rule" : [ "Базовый" ],
+      "value" : ""
+    } ]
+  } ],
   "enabledSystemEntities" : [ "mystem.geo", "mystem.obsc", "pymorphy.geox", "duckling.number", "duckling.time", "duckling.date", "duckling.time-of-day", "duckling.duration", "duckling.phone-number", "duckling.email", "duckling.url", "mlps-obscene.obscene" ],
   "spellerDictionary" : [ ],
   "systemEntities" : [ {
