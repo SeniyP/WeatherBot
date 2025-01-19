@@ -12,7 +12,7 @@ theme: /
         a: Ругательства это плохо
         go!: /HelpInfo
     
-    state: Ban
+    state: Test
         intent!: /Test
         a: Это был тест
     
