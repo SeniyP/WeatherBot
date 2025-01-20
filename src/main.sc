@@ -28,7 +28,7 @@ theme: /
         a: Могу я помочь чем то еще?
     
     state: GetWeather
-        intent!: /geo
+        intent!: /weather_geo
         script:
             var city = $caila.inflect($parseTree._geo, ["nomn"]);
                 openWeatherMapCurrent("metric", "ru", city).then(function (res) {
@@ -48,7 +48,7 @@ theme: /
         go!: /CloseTask
 
     state: fullgeo
-        intent!: /fullgeo
+        intent!: /weather_fullgeo
         script:
             var city = $caila.inflect($parseTree._geo, ["nomn"]);
                 openWeatherMapCurrent("metric", "ru", city).then(function (res) {
@@ -76,7 +76,7 @@ theme: /
         go!: /CloseTask
 
     state: GetWeatherWithDate
-        intent!: /date
+        intent!: /weather_date
         script:
             var city = $caila.inflect($parseTree._geo, ["nomn"]);
                 var date = $parseTree._date;
@@ -107,7 +107,7 @@ theme: /
 
 
     state: Activity
-        intent!: /activity
+        intent!: /weather_activity
         script:
             var city = $parseTree._geo ? $caila.inflect($parseTree._geo, ["nomn"]) : null;
             $reactions.answer("Ищу погоду для города: " + city);
@@ -115,7 +115,7 @@ theme: /
         go!: /CloseTask
     
     state: Clothing
-        intent!: /clothing
+        intent!: /weather_clothing
         script:
             var city = $parseTree._geo ? $caila.inflect($parseTree._geo, ["nomn"]) : null;
             $reactions.answer("Ищу погоду для города: " + city);
